@@ -1,0 +1,37 @@
+import React from 'react';
+import {connect} from 'react-redux';
+import { ModelActions } from '../actions/ModelActions';
+import ToolBar from './ToolBar';
+
+function MaterialBar(props){
+    const mat=props.model.material;
+    return <ToolBar caption={"Материал"}>
+        <div>
+        <input disabled={props.disabled} value={mat.name} onChange={(e)=>{props.setMaterial({...mat,name:e.target.value})}} style={{width:"98%"}}/>
+        </div>
+        <br/>
+        <input disabled={props.disabled} type="checkbox" checked={mat.gloss} onChange={(e)=>{props.setMaterial({...mat,gloss:e.target.checked});e.target.blur()}}/>
+        <span>{` глянцевый`}</span>
+        <br/>
+        <input disabled={props.disabled} type="checkbox" checked={mat.texture} onChange={(e)=>{props.setMaterial({...mat,texture:e.target.checked});e.target.blur()}}/>
+        <span>{" структурный"}</span>
+        <br/>
+        <span>{`Мин. отступ между деталями ${props.model.panelMargin}мм`}</span>
+        <br/>
+        <span>{mat.texture?`Детали нельзя поворачивать`:`Детали можно поворачивать`}</span>
+        </ToolBar>
+}
+
+const mapStateToProps = store => {
+
+    return {
+            model: store.model,
+            captions:store.options.captions,
+    }
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        setMaterial:(mat)=>dispatch(ModelActions.setMaterial(mat))
+    }
+};
+export default connect(mapStateToProps,mapDispatchToProps)(MaterialBar)

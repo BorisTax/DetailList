@@ -1,0 +1,25 @@
+import React from 'react';
+import {connect} from 'react-redux';
+import { ModelActions } from '../actions/ModelActions';
+import { ScreenActions } from '../actions/ScreenActions';
+import ToolBar from './ToolBar';
+
+function ProjectBar(props){
+    return <ToolBar caption={"Проект"}>
+        <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}>
+            <button disabled={props.disabled} id="open_button" onClick={(e)=>{props.open();e.target.blur()}}>Открыть проект</button>
+            <button disabled={props.disabled} id="save_button" onClick={(e)=>{props.save();e.target.blur()}}>Сохранить проект</button>
+            <button disabled={props.disabled} id="print_button" onClick={(e)=>{props.print();e.target.blur()}}>Печать</button>
+        </div>
+        </ToolBar>
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        print:()=>dispatch(ScreenActions.print()),
+        save:()=>dispatch(ModelActions.saveProject()),
+        open:()=>dispatch(ModelActions.openProject()),
+    }
+}
+
+export default connect(null,mapDispatchToProps)(ProjectBar);

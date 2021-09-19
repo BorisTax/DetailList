@@ -5,6 +5,10 @@ const rootReducer = combineReducers({
          state: stateReducer
     })
 
+ export type RootState = {
+         state: State
+ }
+
 
 export type State = {
     library: TLibrary,
@@ -12,6 +16,8 @@ export type State = {
     unitList: TUnit[]
     materials: TMaterial[]
     activeMaterial: number|undefined
+    activeRootGroup:string
+    activeGroup:string
 }
 export type Action = {
     type:string

@@ -1,0 +1,236 @@
+html{
+  height:100vh;
+  overflow: scroll
+}
+body{
+  background-color: whitesmoke;
+  background-image: url("../images/background.png");
+  min-height:100%;
+}
+hr{
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
+th{
+  font-size: small;
+}
+td{
+  padding: 0px;
+  text-align: center;
+}
+.screenContainer{
+  position:absolute;
+  width:80%;
+  height:80%;
+  left:80px;
+  display: flex;
+  flex-direction: column;
+}
+.mainContainer{
+ position: absolute;
+ width:100%;
+ height:100%;
+ padding:-10px;
+}
+.header{
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+.headerProject{
+  display: inline;
+}
+.toolBar{
+  display: inline-block;
+  position: relative;
+  border:5px ridge;
+  background-color: rgba(185, 202, 203, 0.8);
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 100;
+}
+
+.leftSideBar{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  top: 0px;
+  left: 5px;
+  font-size: medium; 
+}
+.rightSideBar{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  top: 0px;
+  right: 10px;
+  font-size: medium; 
+}
+
+.buttonDown{
+
+}
+.button{
+  display: inline-block;
+  background-size: 100%;
+  width: 27px;
+  height: 27px;
+  cursor: pointer;
+}
+.button:hover{
+  mix-blend-mode: multiply;
+  
+}
+.buttonDisabled{
+  display: inline-block;
+  background-size: 100%;
+  width: 27px;
+  height: 27px;
+  mix-blend-mode: multiply;
+}
+.toolBarHeader{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: medium;
+}
+.toolBarHeaderButton{
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  mix-blend-mode:darken;
+}
+.toolBarHeaderButton:hover{
+  background-color: gray;
+  mix-blend-mode:soft-light;
+}
+
+.buttonUp{
+
+}
+
+#ru{
+  background: url('../images/icons/rus.png') no-repeat;
+  background-size: 100%;
+}
+#en{
+  background: url('../images/icons/eng.png') no-repeat;
+  background-size: 100%;
+}
+#fr{
+  background: url('../images/icons/fra.png') no-repeat;
+  background-size: 100%;
+}
+
+#open{
+  background: url('../images/icons/open.png') no-repeat;
+}
+#add{
+  background: url('../images/icons/add.png') no-repeat;
+}
+#increase{
+  background: url('../images/icons/increase.png') no-repeat center;
+  background-size: 100% 100%;
+  width:15px;
+  height:15px
+}
+#decrease{
+  background: url('../images/icons/decrease.png') no-repeat center;
+  background-size: 100% 100%;
+  width:15px;
+  height:15px
+}
+#left{
+  background: url('../images/icons/left.png') no-repeat;
+}
+#right{
+  background: url('../images/icons/right.png') no-repeat;
+}
+#minimize{
+  background: url('../images/icons/minimize.png') no-repeat;
+}
+#maximize{
+  background: url('../images/icons/maximize.png') no-repeat;
+}
+#createPanel{
+  background: url('../images/icons/up.png') no-repeat;
+  width: 16px;
+  height:16px;
+}
+
+#canvas{
+  -position: absolute;
+  border:5px ridge;
+  background-color: rgba(185, 202, 203, 0.8);
+  border-radius: 5px;
+  cursor:none;
+}
+
+.helpSectionHidden{
+  display:none;
+  width:0px;
+  height:0px;
+  z-index: 103;
+}
+.helpSectionShow{
+  display:block;
+  position: relative;
+  z-index: 103;
+  width:0px;
+  height:0px;
+  overflow-x: scroll;
+}
+
+.helpContainer{
+  position:absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width:100%;
+  height:100%;
+  padding:"50px";
+  z-index: 100;
+}
+.modalContainer{
+  position:absolute;
+  top:0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+  height:100%;
+  padding:"50px";
+  z-index: 100;
+}
+
+@keyframes rotation{
+  from{transform: rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+.spinner{
+  width:50px;
+  height:50px;
+  background-image: url('../images/spinner.svg');
+  background-size: cover;
+  animation: rotation infinite 1s linear;
+}
+.flexCenter{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}

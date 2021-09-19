@@ -27,7 +27,7 @@ export type TUnit = {
 export type TLibrary = {
     type:string
     version:string
-    material:TMaterial[]
+    materials:TMaterial[]
     rootGroups:TLibraryRootGroup[]
 }
 export type TLibraryRootGroup = {
