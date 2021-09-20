@@ -14,9 +14,20 @@ hr{
 th{
   font-size: small;
 }
+table{
+  font-size: small;
+  border-collapse:collapse;
+  background-color: white;
+}
 td{
-  padding: 0px;
+  padding: 3px;
   text-align: center;
+  border: 1px solid;
+}
+.tdLeft{
+  padding: 3px;
+  text-align: left;
+  border: 1px solid;
 }
 .screenContainer{
   position:absolute;
@@ -111,6 +122,13 @@ td{
 
 .buttonUp{
 
+}
+
+.singleEdge{
+  text-decoration: underline;
+}
+.doubleEdge{
+  text-decoration: underline double;
 }
 
 #ru{

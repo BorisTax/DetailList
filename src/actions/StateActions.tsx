@@ -13,6 +13,7 @@ export const StateActions={
     SET_MATERIAL:'SET_MATERIAL',
     SET_ACTIVE_ROOT_GROUP:'SET_ACTIVE_ROOT_GROUP',
     SET_ACTIVE_GROUP:'SET_ACTIVE_GROUP',
+    SET_ACTIVE_UNIT:'SET_ACTIVE_UNIT',
     SET_DETAIL_PROPERTY:'SET_DETAIL_PROPERTY',
     LOAD_DETAIL_LIST:'LOAD_DETAIL_LIST',
     SET_DETAIL_LIST:'SET_DETAIL_LIST',
@@ -103,6 +104,12 @@ setActiveRootGroup:(value:string)=>{
 setActiveGroup:(value:string)=>{
         return {
             type:StateActions.SET_ACTIVE_GROUP,
+            payload:value,
+        }
+    },
+setActiveUnit:(value:string)=>{
+    return {
+            type:StateActions.SET_ACTIVE_UNIT,
             payload:value,
         }
     },
