@@ -22,11 +22,13 @@ const LibraryBar: FC = (props) => {
         return (
         <>
         <ToolBar caption={"Библиотека"}>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"stretch"}}>
                 <button onClick={()=>dispatch(StateActions.openLibrary())}>Загрузить</button>
                 <br/>
-                {rootGroups.length>0?<div><ComboBox items={rootGroups} onChange={(value: string)=>{dispatch(StateActions.setActiveRootGroup(value))}}/></div>:<></>}
-                {groups.length>0?<div><ComboBox items={groups} onChange={(value: string)=>{dispatch(StateActions.setActiveGroup(value))}}/></div>:<></>}
-                {units?<div><ComboBox items={units} size={15} onChange={()=>{}}/></div>:<></>}
+                {rootGroups.length>0?<div><ComboBox items={rootGroups} title="Группа: " onChange={(value: string)=>{dispatch(StateActions.setActiveRootGroup(value))}}/></div>:<></>}
+                {groups.length>0?<div><ComboBox items={groups} title="Вид: " onChange={(value: string)=>{dispatch(StateActions.setActiveGroup(value))}}/></div>:<></>}
+                {units?<div><ComboBox items={units} title="" size={15} onChange={()=>{}}/></div>:<></>}
+            </div>
         </ToolBar>
         </>
         );
