@@ -17,8 +17,11 @@ export type State = {
     materials: TMaterial[]
     activeMaterial: number|undefined
     activeRootGroup:string
+    activeRootGroupIndex:number
     activeGroup:string
+    activeGroupIndex:number
     activeUnit:string
+    activeUnitIndex:number
 }
 export type Action = {
     type:string

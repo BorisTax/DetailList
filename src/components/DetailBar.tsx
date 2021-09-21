@@ -12,10 +12,18 @@ const DetailBar: FC = (props) => {
     const activeRootGroup: string = state.activeRootGroup
     const activeGroup: string = state.activeGroup
     const activeUnit: string = state.activeUnit
-    const root: TLibraryRootGroup|undefined = state.library.rootGroups.find((rg:TLibraryRootGroup)=>rg.name===activeRootGroup)
-    const group: TLibraryGroup|undefined = root?.groups?.find((g:TLibraryGroup)=>g.name===activeGroup)
-    const unit: TLibraryUnit|undefined = group?.units.find((u:TLibraryUnit)=>u.name===activeUnit)
+    const root: TLibraryRootGroup|undefined = state.library.rootGroups[state.activeRootGroupIndex]
+    const group: TLibraryGroup|undefined = root?.groups[state.activeGroupIndex]
+    const unit: TLibraryUnit|undefined = group?.units[state.activeUnitIndex]
     const unitShortName = unit?.shortName
+    const header=<tr>
+                <th>Название</th>
+                <th>Длина</th>
+                <th>Ширина</th>
+                <th>Кол-во</th>
+                <th>Паз</th>
+                <th>Прим.</th>
+                </tr>
     const details = unit?.details.map((d: TLibraryDetail,index:number) => {
             let edgeLength=""
             let edgeWidth=""
@@ -37,6 +45,7 @@ const DetailBar: FC = (props) => {
         <>
         <ToolBar caption={`Детали ${unitShortName||""}`}>
             <table>
+                {header}
                 <tbody>
                   {details}  
                 </tbody>

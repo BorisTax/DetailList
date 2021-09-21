@@ -12,7 +12,17 @@ export default function Counter(props: ICounterProps){
             props.setValue(props.value+1)
         }
         }}/>
-    return <span style={{display:"flex",alignItems:"center"}}>{decreaseButton}{props.value}{increaseButton}</span>
+    const decreaseTenButton=<ToolButton disabled={props.disabled} id="decrease" onClick={()=>{
+        if((props.value-props.min)>10){
+            props.setValue(props.value-10)
+        }
+        }}/>
+    const increaseTenButton=<ToolButton disabled={props.disabled} id="increase" onClick={()=>{
+        if((props.max-props.value)>10){
+            props.setValue(props.value+10)
+        }
+        }}/>
+    return <span style={{display:"flex",alignItems:"center"}}>{decreaseTenButton}{decreaseButton}{props.value}{increaseButton}{increaseTenButton}</span>
 }
 
 interface ICounterProps {
@@ -20,5 +30,5 @@ interface ICounterProps {
     value:number,
     max:number,
     min:number,
-    setValue:(value:number)=>number
+    setValue:(value:number)=>void
 }

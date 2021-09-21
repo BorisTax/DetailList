@@ -95,19 +95,19 @@ setMaterial:(mat:any)=>{
             payload:mat,
         }
     },
-setActiveRootGroup:(value:string)=>{
+setActiveRootGroup:(value:number)=>{
         return {
             type:StateActions.SET_ACTIVE_ROOT_GROUP,
             payload:value,
         }
     },
-setActiveGroup:(value:string)=>{
+setActiveGroup:(value:number)=>{
         return {
             type:StateActions.SET_ACTIVE_GROUP,
             payload:value,
         }
     },
-setActiveUnit:(value:string)=>{
+setActiveUnit:(value:number)=>{
     return {
             type:StateActions.SET_ACTIVE_UNIT,
             payload:value,

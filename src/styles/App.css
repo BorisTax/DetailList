@@ -13,6 +13,9 @@ hr{
 }
 th{
   font-size: small;
+  padding: 3px;
+  text-align: center;
+  border: 1px solid;
 }
 table{
   font-size: small;
