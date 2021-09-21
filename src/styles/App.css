@@ -65,12 +65,11 @@ td{
 }
 
 .leftSideBar{
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   top: 0px;
-  left: 5px;
   font-size: medium; 
 }
 .rightSideBar{

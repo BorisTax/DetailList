@@ -11,14 +11,17 @@ export const StateActions={
     SET_LIBRARY:"SET_LIBRARY",
     SET_INFORMATION:'SET_INFORMATION',
     SET_MATERIAL:'SET_MATERIAL',
+    SET_ACTIVE_UNIT_COUNT:'SET_ACTIVE_UNIT_COUNT',    
     SET_ACTIVE_ROOT_GROUP:'SET_ACTIVE_ROOT_GROUP',
     SET_ACTIVE_GROUP:'SET_ACTIVE_GROUP',
     SET_ACTIVE_UNIT:'SET_ACTIVE_UNIT',
+    SET_ACTIVE_LIBRARY_MATERIAL:'SET_ACTIVE_LIBRARY_MATERIAL',
     SET_DETAIL_PROPERTY:'SET_DETAIL_PROPERTY',
     LOAD_DETAIL_LIST:'LOAD_DETAIL_LIST',
     SET_DETAIL_LIST:'SET_DETAIL_LIST',
     SET_DRAW_MODULE:'SET_DRAW_MODULE',
     ADD_DETAIL:'ADD_DETAIL',
+    ADD_ACTIVE_UNIT:'ADD_ACTIVE_UNIT',
     SET_ACTIVE_TABLE:"SET_ACTIVE_TABLE",
     SET_COMPLECT_COUNT:"SET_COMPLECT_COUNT",
     DELETE_ACTIVE_TABLE:"DELETE_ACTIVE_TABLE",
@@ -95,6 +98,12 @@ setMaterial:(mat:any)=>{
             payload:mat,
         }
     },
+setActiveLibraryMaterial:(index:number, material:string)=>{
+        return {
+            type:StateActions.SET_ACTIVE_LIBRARY_MATERIAL,
+            payload:{index, material},
+        }
+    },
 setActiveRootGroup:(value:number)=>{
         return {
             type:StateActions.SET_ACTIVE_ROOT_GROUP,
@@ -113,6 +122,17 @@ setActiveUnit:(value:number)=>{
             payload:value,
         }
     },
+setActiveUnitCount:(value:number)=>{
+        return {
+                type:StateActions.SET_ACTIVE_UNIT_COUNT,
+                payload:value,
+            }
+        },
+addActiveUnit:()=>{
+        return {
+                type:StateActions.ADD_ACTIVE_UNIT,
+            }
+        },
 deleteTableConfirm:()=>{
     return {
 

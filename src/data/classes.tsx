@@ -2,7 +2,7 @@ import { TDetail, TLibrary, TLibraryUnit, TLibraryRootGroup, TMaterial, TUnit, T
 
 export class DetailListWorker {
     public static getListByMaterial = (detailList :TDetail[], materialName:string):TDetail[] => {
-        return detailList.filter((d:TDetail) => d.material?.name === materialName)
+        return detailList.filter((d:TDetail) => d.material === materialName)
     }
     
 }
@@ -32,7 +32,7 @@ export class UnitListWorker {
                 if(det){
                     det.count += detail.count
                     for(const key of detail.modules)
-                            if(det.modules.has(key[0])){
+                            if(det.modules?.has(key[0])){
                                 det.modules.set(key[0], det.modules.get(key[0])||0 + (detail.modules.get(key[0])||0))
                             }
                 }else{
@@ -58,7 +58,7 @@ const isEqualDetail=(det1:TDetail,det2:TDetail):boolean => {
     return (det1.name===det2.name&&
             det1.length===det2.length&&
             det1.width&&det2.width&&
-            det1.material?.name===det2.material?.name&&
+            det1.material === det2.material&&
             det1.edgeLength1===det2.edgeLength1&&
             det1.edgeLength2===det2.edgeLength2&&
             det1.edgeWidth1===det2.edgeWidth1&&
@@ -67,7 +67,10 @@ const isEqualDetail=(det1:TDetail,det2:TDetail):boolean => {
             det1.comment===det2.comment)?true:false
 }
 const isEqualUnit=(unit1:TUnit,unit2:TUnit):boolean => {
-    return (unit1.id===unit2.id);
+    return (unit1.rootGroupName===unit2.rootGroupName&&
+        unit1.groupName===unit2.groupName&&
+        unit1.name===unit2.name&&
+        unit1.materials.every((m, index)=>m===unit2.materials[index]));
 }
 
 export class UnitMap{

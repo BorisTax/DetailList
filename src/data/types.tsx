@@ -4,17 +4,16 @@ export type TDetail = {
     width:number
     count:number
     materialID:number
-    material?: TMaterial
+    material?: string
     edgeLength1:number
     edgeLength2:number
     edgeWidth1:number
     edgeWidth2:number
     paz:string
     comment:string
-    modules:Map<string, number>
+    modules?:Map<string, number>
 }
 export type TUnit = {
-    id:number
     name:string
     shortName:string
     rootGroupName:string
@@ -22,7 +21,7 @@ export type TUnit = {
     count:number
     details:TDetail[]
     materialsCount:number
-    materials:TMaterial[]
+    materials:string[]
 }
 export type TLibrary = {
     type:string
@@ -42,7 +41,7 @@ export type TLibraryUnit = {
     name:string
     shortName:string
     materialsCount:number
-    details:TLibraryDetail[]
+    details:TDetail[]
 }
 export type TLibraryDetail = {
     name:string

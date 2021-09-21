@@ -1,5 +1,7 @@
 import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
+import { UnitListWorker } from "../data/classes";
+import { TMaterial, TUnit } from "../data/types";
 export const initLybrary={
         type:"",
         version:"",
@@ -11,14 +13,14 @@ const initialState: State={
     detailList: [],
     unitList: [],
     materials:[],
-    activeMaterial:undefined,
     activeRootGroup:"",
     activeRootGroupIndex:0,
     activeGroup:"",
     activeGroupIndex:0,
     activeUnit:"",
-    activeUnitIndex:0
-
+    activeUnitIndex:0,
+    activeLibraryMaterials:[],
+    activeUnitCount: 1
 
 }
 const stateReducer = (state : State = initialState, action : Action)=>{
@@ -29,15 +31,36 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     var activeRootGroup:string
     var activeGroup:string
     var activeUnit:string
+    var activeLibraryMaterials:string[]
     switch (action.type){
+            case StateActions.ADD_ACTIVE_UNIT:
+                const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
+                const mat=Array(unit.materialsCount).fill(0).map((_, index:number) => state.library.materials[state.activeLibraryMaterials[index]].name)
+                const newUnit: TUnit = {
+                    name: unit.name,
+                    shortName: unit.shortName,
+                    groupName: state.activeGroup,
+                    rootGroupName: state.activeRootGroup,
+                    count: state.activeUnitCount,
+                    details:[...unit.details],
+                    materialsCount: unit.materialsCount,
+                    materials: mat
+                }
+                const dList = UnitListWorker.addUnit(state.unitList,newUnit)
+                return {...state, detailList: dList, activeUnitCount:1}
+        case StateActions.SET_ACTIVE_UNIT_COUNT:
+                    return {...state, activeUnitCount: payload}
         case StateActions.SET_LIBRARY:
-            activeRootGroupIndex = 0 
-            activeRootGroup = payload.rootGroups[0].name
-            activeGroupIndex = 0
-            activeGroup = payload.rootGroups[0].groups[0].name
-            activeUnitIndex = 0
-            activeUnit = payload.rootGroups[0].groups[0].units[0].name
-            return {...state,library:action.payload,activeRootGroup,activeRootGroupIndex,activeGroup,activeGroupIndex,activeUnit,activeUnitIndex}
+            const activeFields={
+                activeRootGroupIndex : 0, 
+                activeRootGroup : payload.rootGroups[0].name,
+                activeGroupIndex : 0,
+                activeGroup : payload.rootGroups[0].groups[0].name,
+                activeUnitIndex : 0,
+                activeUnit : payload.rootGroups[0].groups[0].units[0].name,
+                activeLibraryMaterials: Array(payload.rootGroups[0].groups[0].units[0].materialCount).fill(0)
+            }
+            return {...state,library:action.payload, ...activeFields}
         case StateActions.SET_ACTIVE_ROOT_GROUP:
             activeRootGroupIndex = payload
             activeRootGroup = state.library.rootGroups[activeRootGroupIndex].name
@@ -46,11 +69,15 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             activeGroupIndex = payload
             activeGroup = state.library.rootGroups[state.activeRootGroupIndex].groups[activeGroupIndex].name
             var activeUnit = state.library.rootGroups[state.activeRootGroupIndex].groups[activeGroupIndex].units[0].name
-            return {...state,activeGroup: payload,activeGroupIndex,activeUnit,activeUnitIndex:0}
+            return {...state,activeGroup,activeUnit,activeUnitIndex:0}
         case StateActions.SET_ACTIVE_UNIT:
             activeUnitIndex = payload
             activeUnit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[activeUnitIndex].name
             return {...state,activeUnit,activeUnitIndex}
+        case StateActions.SET_ACTIVE_LIBRARY_MATERIAL:
+            const materialIndex = state.library.materials.findIndex(m => m.name===payload.material)
+            state.activeLibraryMaterials[payload.index] = materialIndex
+            return {...state}
             default:
              return state;
     }

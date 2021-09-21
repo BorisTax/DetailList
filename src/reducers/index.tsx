@@ -15,13 +15,14 @@ export type State = {
     detailList: TDetail[]
     unitList: TUnit[]
     materials: TMaterial[]
-    activeMaterial: number|undefined
     activeRootGroup:string
     activeRootGroupIndex:number
     activeGroup:string
     activeGroupIndex:number
     activeUnit:string
     activeUnitIndex:number
+    activeLibraryMaterials:number[]
+    activeUnitCount:number
 }
 export type Action = {
     type:string
