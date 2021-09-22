@@ -1,9 +1,8 @@
-import { count } from 'console';
-import React, { FC, ReactFragment, useState } from 'react';
+import React, { FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StateActions } from '../actions/StateActions';
 
-import { TLibraryGroup, TLibraryRootGroup, TLibraryUnit, TMaterial } from '../data/types';
+import { TLibraryGroup, TLibraryRootGroup, TLibraryUnit } from '../data/types';
 import { RootState, State } from '../reducers';
 import ComboBox from './ComboBox';
 import Counter from './Counter';
@@ -38,7 +37,7 @@ const LibraryBar: FC = (props) => {
                             <span>{activeUnitShort}</span>
                             <div style={{display:"flex",alignItems:"center"}}>
                             <Counter value={state.activeUnitCount} min={1} max={10000} setValue={(value)=>dispatch(StateActions.setActiveUnitCount(value))}/>
-                            <button onClick={()=>dispatch(StateActions.addActiveUnit())}>{"Добавить >>"}</button>
+                            <button onClick={()=>dispatch(StateActions.addActiveUnit())}>{"Добавить в план >>"}</button>
                             </div>
                         </div>
     const dispatch = useDispatch()

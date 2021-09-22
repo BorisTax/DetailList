@@ -1,7 +1,7 @@
 import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
-import { TMaterial, TUnit } from "../data/types";
+import { TUnit } from "../data/types";
 export const initLybrary={
         type:"",
         version:"",
@@ -31,7 +31,6 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     var activeRootGroup:string
     var activeGroup:string
     var activeUnit:string
-    var activeLibraryMaterials:string[]
     switch (action.type){
             case StateActions.ADD_ACTIVE_UNIT:
                 const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
@@ -68,8 +67,8 @@ const stateReducer = (state : State = initialState, action : Action)=>{
         case StateActions.SET_ACTIVE_GROUP:
             activeGroupIndex = payload
             activeGroup = state.library.rootGroups[state.activeRootGroupIndex].groups[activeGroupIndex].name
-            var activeUnit = state.library.rootGroups[state.activeRootGroupIndex].groups[activeGroupIndex].units[0].name
-            return {...state,activeGroup,activeUnit,activeUnitIndex:0}
+            activeUnit = state.library.rootGroups[state.activeRootGroupIndex].groups[activeGroupIndex].units[0].name
+            return {...state,activeGroup,activeGroupIndex,activeUnit,activeUnitIndex:0}
         case StateActions.SET_ACTIVE_UNIT:
             activeUnitIndex = payload
             activeUnit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[activeUnitIndex].name

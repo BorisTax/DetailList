@@ -1,5 +1,4 @@
-import React, { FC, ReactNode } from 'react';
-
+import React, { FC } from 'react';
 interface ComboBoxProps {
     value:string
     items?:string[]
@@ -15,7 +14,7 @@ const ComboBox: FC<ComboBoxProps> = (props: ComboBoxProps) => {
         <span style={{fontSize:"small",marginRight:"5px", whiteSpace: "nowrap"}}>{props.title}</span>
         <select style={{width:"100%"}} size={!props.size?1:props.size} 
             onChange={(e)=>{
-                        const index = props.items?.findIndex(i=>i==e.target.value)||0
+                        const index = props.items?.findIndex(i=>i === e.target.value)||0
                         props.onChange(index, e.target.value)
                         }}>
             {options}

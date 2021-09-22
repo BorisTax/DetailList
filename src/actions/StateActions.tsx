@@ -1,6 +1,4 @@
-import { Dispatch } from "react";
 import { AppDispatch } from "..";
-import { TLibrary } from "../data/types";
 
 export const StateActions={
     SAVE_PROJECT:"SAVE_PROJECT",
@@ -63,7 +61,6 @@ openProject(){
     }
 },
 openLibrary(){
-    var content: TLibrary 
     return (dispatch: AppDispatch)=>{
         var input = document.createElement('input');
         input.type = 'file';
@@ -149,10 +146,8 @@ loadDetailList:()=>{
             const file=e.target.files[0]; 
             var reader = new FileReader();
             reader.readAsText(file,'UTF-8');
-         
-            // here we tell the reader what to do when it's done reading...
             reader.onload = readerEvent => {
-               var content = readerEvent?.target?.result; // this is the content!
+               //var content = readerEvent?.target?.result; 
                dispatch( {type:StateActions.SET_DETAIL_LIST,payload: {}} );
             }
         }

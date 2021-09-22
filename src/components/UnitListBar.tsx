@@ -1,17 +1,12 @@
-import { count } from 'console';
-import React, { FC, ReactFragment, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { StateActions } from '../actions/StateActions';
+import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 
-import { TLibraryGroup, TLibraryRootGroup, TLibraryUnit, TMaterial, TUnit } from '../data/types';
+import { TUnit } from '../data/types';
 import { RootState, State } from '../reducers';
-import ComboBox from './ComboBox';
-import Counter from './Counter';
 import ToolBar from './ToolBar';
 
 const UnitListBar: FC = (props) => {
     const state: State = useSelector((store: RootState)=>store.state)
-    const dispatch = useDispatch()
     const header=<tr>
             <th>Вид</th>
             <th>Модуль</th>

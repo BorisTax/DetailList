@@ -1,14 +1,18 @@
-import React, { FC, ReactFragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { StateActions } from '../actions/StateActions';
+import React, { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 import '../styles/App.css';
-import { TDetail, TLibraryDetail, TLibraryGroup, TLibraryRootGroup, TLibraryUnit } from '../data/types';
+import { TDetail } from '../data/types';
 import { RootState } from '../reducers';
 import ComboBox from './ComboBox';
 import ToolBar from './ToolBar';
 
 const DetailListBar: FC = (props) => {
     const state = useSelector((store: RootState)=>store.state)
+    const materialSet = new Set()
+    state.detailList.forEach((d: TDetail) => {if(!materialSet.has(d.material)) materialSet.add(d.material)})
+    const curMaterials:string[] = Array.from(materialSet) as string[]
+    console.log(materialSet)
+    const [currentMaterialIndex, setCurrentMaterialIndex] = useState(0)
     const header=<tr>
                 <th>Название</th>
                 <th>Длина</th>
@@ -18,7 +22,7 @@ const DetailListBar: FC = (props) => {
                 <th>Прим.</th>
                 <th>Модуль</th>
                 </tr>
-    const details = state.detailList.map((d: TDetail,index:number) => {
+    const details = state.detailList.filter((d: TDetail) => d.material === curMaterials[currentMaterialIndex]).map((d: TDetail,index:number) => {
             let modules: string[] = []
             if ((d.modules?.size||0) > 1) d.modules?.forEach((value, key) => modules.push(`${key}-${value}`)); else modules[0] = d.modules?.keys().next().value;
             let edgeLength=""
@@ -34,13 +38,13 @@ const DetailListBar: FC = (props) => {
                     <td>{d.count}</td>
                     <td>{d.paz}</td>
                     <td>{d.comment}</td>
-                    <td>{modules.join(', ')}</td>
+                    <td className="tdLeft">{modules.join(', ')}</td>
                 </tr>
     })
-    const dispatch = useDispatch()
         return (
         <>
         <ToolBar caption={`Общий список деталей`}>
+            <ComboBox title={"Материал:"} items={curMaterials} value={curMaterials[currentMaterialIndex]} onChange={(value=>setCurrentMaterialIndex(value))}/>
             <table>
                 {header}
                 <tbody>

@@ -1,5 +1,4 @@
-import React, { FC, Fragment } from 'react';
-import logo from './logo.svg';
+import React, { FC } from 'react';
 import './styles/App.css';
 import LibraryBar from './components/LibraryBar';
 import DetailBar from './components/DetailBar';

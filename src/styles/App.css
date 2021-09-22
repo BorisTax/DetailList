@@ -26,6 +26,7 @@ td{
   padding: 3px;
   text-align: center;
   border: 1px solid;
+  white-space: nowrap;
 }
 .tdLeft{
   padding: 3px;

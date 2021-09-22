@@ -1,17 +1,12 @@
-import React, { FC, ReactFragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { StateActions } from '../actions/StateActions';
+import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import '../styles/App.css';
-import { TDetail, TLibraryDetail, TLibraryGroup, TLibraryRootGroup, TLibraryUnit } from '../data/types';
+import { TDetail, TLibraryGroup, TLibraryRootGroup, TLibraryUnit } from '../data/types';
 import { RootState } from '../reducers';
-import ComboBox from './ComboBox';
 import ToolBar from './ToolBar';
 
 const DetailBar: FC = (props) => {
     const state = useSelector((store: RootState)=>store.state)
-    const activeRootGroup: string = state.activeRootGroup
-    const activeGroup: string = state.activeGroup
-    const activeUnit: string = state.activeUnit
     const root: TLibraryRootGroup|undefined = state.library.rootGroups[state.activeRootGroupIndex]
     const group: TLibraryGroup|undefined = root?.groups[state.activeGroupIndex]
     const unit: TLibraryUnit|undefined = group?.units[state.activeUnitIndex]
@@ -40,7 +35,6 @@ const DetailBar: FC = (props) => {
                     <td>{d.comment}</td>
                 </tr>
     })
-    const dispatch = useDispatch()
         return (
         <>
         <ToolBar caption={`Детали ${unitShortName||""}`}>

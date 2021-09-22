@@ -3,7 +3,7 @@ export type TDetail = {
     length:number
     width:number
     count:number
-    materialID:number
+    materialId:number
     material?: string
     edgeLength1:number
     edgeLength2:number

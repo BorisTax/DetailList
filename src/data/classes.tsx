@@ -1,4 +1,4 @@
-import { TDetail, TLibrary, TLibraryUnit, TLibraryRootGroup, TMaterial, TUnit, TLibraryGroup } from "./types";
+import { TDetail, TLibrary, TLibraryUnit, TLibraryRootGroup, TUnit, TLibraryGroup } from "./types";
 
 export class DetailListWorker {
     public static getListByMaterial = (detailList :TDetail[], materialName:string):TDetail[] => {
@@ -28,7 +28,7 @@ export class UnitListWorker {
                 //detail.count = detail.count
                 detail.modules = new Map()
                 detail.modules.set(unit.shortName,detail.count * unit.count)
-                detail.material = unit.materials[detail.materialID]
+                detail.material = unit.materials[detail.materialId]
                 const det = detailList.find((d:TDetail) => isEqualDetail(detail,d))
                 if(det){
                     det.count += detail.count * unit.count
