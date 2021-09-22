@@ -4,6 +4,7 @@ import './styles/App.css';
 import LibraryBar from './components/LibraryBar';
 import DetailBar from './components/DetailBar';
 import UnitListBar from './components/UnitListBar';
+import DetailListBar from './components/DetailListBar';
 
 const App:FC = () => { 
   return (
@@ -13,6 +14,7 @@ const App:FC = () => {
      <DetailBar/>
     </div>
     <UnitListBar/>
+    <DetailListBar/>
     </div>
   );
 }

@@ -7,15 +7,8 @@ import { RootState } from '../reducers';
 import ComboBox from './ComboBox';
 import ToolBar from './ToolBar';
 
-const DetailBar: FC = (props) => {
+const DetailListBar: FC = (props) => {
     const state = useSelector((store: RootState)=>store.state)
-    const activeRootGroup: string = state.activeRootGroup
-    const activeGroup: string = state.activeGroup
-    const activeUnit: string = state.activeUnit
-    const root: TLibraryRootGroup|undefined = state.library.rootGroups[state.activeRootGroupIndex]
-    const group: TLibraryGroup|undefined = root?.groups[state.activeGroupIndex]
-    const unit: TLibraryUnit|undefined = group?.units[state.activeUnitIndex]
-    const unitShortName = unit?.shortName
     const header=<tr>
                 <th>Название</th>
                 <th>Длина</th>
@@ -23,8 +16,11 @@ const DetailBar: FC = (props) => {
                 <th>Кол-во</th>
                 <th>Паз</th>
                 <th>Прим.</th>
+                <th>Модуль</th>
                 </tr>
-    const details = unit?.details.map((d: TDetail,index:number) => {
+    const details = state.detailList.map((d: TDetail,index:number) => {
+            let modules: string[] = []
+            if ((d.modules?.size||0) > 1) d.modules?.forEach((value, key) => modules.push(`${key}-${value}`)); else modules[0] = d.modules?.keys().next().value;
             let edgeLength=""
             let edgeWidth=""
             if(d.edgeLength1||d.edgeLength2) edgeLength="singleEdge"
@@ -38,12 +34,13 @@ const DetailBar: FC = (props) => {
                     <td>{d.count}</td>
                     <td>{d.paz}</td>
                     <td>{d.comment}</td>
+                    <td>{modules.join(', ')}</td>
                 </tr>
     })
     const dispatch = useDispatch()
         return (
         <>
-        <ToolBar caption={`Детали ${unitShortName||""}`}>
+        <ToolBar caption={`Общий список деталей`}>
             <table>
                 {header}
                 <tbody>
@@ -54,5 +51,5 @@ const DetailBar: FC = (props) => {
         </>
         );
     }
-export default DetailBar
+export default DetailListBar
 

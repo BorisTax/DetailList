@@ -25,18 +25,19 @@ export class UnitListWorker {
         const detailList: TDetail[] = []
         for(const unit of unitList){
             for(const detail of unit.details){
+                //detail.count = detail.count
                 detail.modules = new Map()
-                detail.modules.set(unit.shortName,detail.count)
+                detail.modules.set(unit.shortName,detail.count * unit.count)
                 detail.material = unit.materials[detail.materialID]
                 const det = detailList.find((d:TDetail) => isEqualDetail(detail,d))
                 if(det){
-                    det.count += detail.count
+                    det.count += detail.count * unit.count
                     for(const key of detail.modules)
-                            if(det.modules?.has(key[0])){
-                                det.modules.set(key[0], det.modules.get(key[0])||0 + (detail.modules.get(key[0])||0))
-                            }
+                            //if(det.modules?.has(key[0])){
+                                det.modules?.set(key[0], det.modules.get(key[0])||0 + (detail.modules.get(key[0])||0))
+                            //}//else det.modules?.set(key[0], det.modules.get(key[0])||0 + ((detail.modules.get(key[0])||0) * unit.count)
                 }else{
-                    detailList.push({...detail})
+                    detailList.push({...detail, count: detail.count * unit.count})
                 }
             }
         }
