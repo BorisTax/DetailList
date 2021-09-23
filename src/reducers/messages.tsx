@@ -22,6 +22,8 @@ const messagesReducer = (state : Messages = initialState, action : Action)=>{
                 return {type:'confirm',show: true, title:"Очистить список?", onOkAction:()=>StateActions.clearPlan()}
             case MessagesActions.HIDE_DIALOGS:
                 return {...state, show: false}
+            case MessagesActions.OPEN_PLAN_ERROR:
+                return {...state, type:'alert',title:payload, show: true}
             default:
              return state;
     }

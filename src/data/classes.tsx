@@ -43,6 +43,63 @@ export class UnitListWorker {
         }
         return detailList
     }
+
+
+    public static parseUnitList = (content: string, library: TLibrary) => {
+        if(!library?.type) return {
+            error:true,
+            errorMessage:'Не загружена библиотека'
+        }
+        const unitList: any = []
+        const contents = content.split('\r\n').map(line=>line.split(';'));
+        let line=0
+        for(let c of contents) {
+            line++
+            const unit:TUnit = {
+                groupName : c[0],
+                name : c[1],
+                count : Math.round(+c[2]),
+                materialsCount : Math.round(+c[3]),
+                materials : Array(Math.round(+c[3])||0).fill(''),
+                rootGroupName:'',
+                shortName:'',
+                details:[]
+            }
+            unit.rootGroupName = c[c.length-1]
+            const rootIndex = library.rootGroups.findIndex((rg: TLibraryRootGroup)=>rg.name===unit.rootGroupName)
+            if(rootIndex<0)return {
+                error:true,
+                errorMessage:`Не найдена группа "${unit.rootGroupName}". Строка ${line}`
+            }
+            const groupIndex = library.rootGroups[rootIndex].groups.findIndex((g: TLibraryGroup)=>g.name===unit.groupName)
+            if(groupIndex<0) return {
+                error:true,
+                errorMessage:`Не найден вид "${unit.groupName}". Строка ${line}`
+            }
+            const unitIndex = library.rootGroups[rootIndex].groups[groupIndex].units.findIndex((u: TLibraryUnit)=>u.name===unit.name)
+            if(unitIndex<0) return {
+                error:true,
+                errorMessage:`Не найден модуль "${unit.name}". Строка ${line}`
+            }
+            if(isNaN(+unit.count)||unit.count<=0) return {
+                error:true,
+                errorMessage:`Неправильное кол-во в строке ${line}`
+            }
+            if(isNaN(+unit.materialsCount)||unit.materialsCount<=0) return {
+                error:true,
+                errorMessage:`Неправильное кол-во материалов в строке ${line}`
+            }
+            let i = 3
+            unit.materials = Array(unit.materialsCount).fill('').map(() => c[++i])
+            unit.shortName = library.rootGroups[rootIndex].groups[groupIndex].units[unitIndex].shortName
+            unit.details = [...library.rootGroups[rootIndex].groups[groupIndex].units[unitIndex].details]
+            unitList.push(unit)
+        }
+        return{
+            error:false,
+            content: unitList
+        }
+    }
 }
 
 export class LibraryWorker{

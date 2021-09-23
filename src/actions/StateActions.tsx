@@ -2,7 +2,10 @@ import { AppDispatch } from "..";
 
 export const StateActions={
     SAVE_PROJECT:"SAVE_PROJECT",
+    SAVE_PLAN:"SAVE_PLAN",
+    SET_PLAN:"SET_PLAN",
     OPEN_PROJECT:"OPEN_PROJECT",
+    OPEN_PLAN:"OPEN_PLAN",
     OPEN_LIBRARY:"OPEN_LIBRARY",
     OPEN_FAILURE:"OPEN_FAILURE",
     SET_PROJECT:"SET_PROJECT",
@@ -37,6 +40,14 @@ saveProject(){
     return {
         type:StateActions.SAVE_PROJECT
     }
+},
+savePlan(){
+    return {
+        type:StateActions.SAVE_PLAN
+    }
+},
+openPlan(){
+
 },
 openProject(){
 

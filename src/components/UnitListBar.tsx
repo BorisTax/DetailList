@@ -31,7 +31,7 @@ const UnitListBar: FC = (props) => {
             <th>Материал 2</th>
             </tr>
     const units = state.unitList.map((u: TUnit, index:number) => {
-            return <tr key={index} className={selectedRows[index]?`trSelected`:''} onClick={(e) => setSelectedRows(setSelected(index, e.shiftKey))}>
+            return <tr key={index} className={selectedRows[index]?`trSelected`:''} onClick={(e) => {setSelectedRows(setSelected(index, e.shiftKey));e.stopPropagation()}}>
                     <td className="tdLeft">{index+1}</td>
                     <td className="tdLeft">{u.groupName}</td>
                     <td className="tdLeft">{u.name}</td>
@@ -41,9 +41,11 @@ const UnitListBar: FC = (props) => {
     })
         return (
         <>
-        <ToolBar caption={"План"}>
+        <ToolBar caption={"План"} onClick={(e)=>{setSelectedRows(selectedRows.map(r=>false))}}>
             <ToolButtonBar>
                 <ToolButton id={"new"} title={"Очистить список"} onClick={() => dispatch(MessagesActions.confirmClearingUnitListInPlan())} disabled={state.unitList.length===0}/>
+                <ToolButton id={"open"} title={"Загрузить список"} onClick={() => dispatch(MessagesActions.openPlan(state.library))} />
+                <ToolButton id={"save"} title={"Сохранить список"} onClick={() => dispatch(StateActions.savePlan())} disabled={state.unitList.length===0}/>
                 <ToolButton id={"delete"} title={"Удалить выделенные строки"} onClick={() => dispatch(MessagesActions.confirmDeletingUnitsFromPlan(selectedRows))} disabled={selectedRows.every(r=>!r)||(selectedRows.length===0)}/>
             </ToolButtonBar>
             <table style={{fontSize:"small"}}>

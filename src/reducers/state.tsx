@@ -81,6 +81,9 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             const materialIndex = state.library.materials.findIndex(m => m.name===payload.material)
             state.activeLibraryMaterials[payload.index] = materialIndex
             return {...state}
+        case StateActions.SET_PLAN:
+            const lists={unitList : payload, detailList : UnitListWorker.makeDetailList(payload)}
+            return {...state, ...lists}
         case StateActions.DELETE_SELECTED_UNITS_IN_PLAN:
             const unitList = state.unitList.filter((_, index) => !payload[index])
             const detList = UnitListWorker.makeDetailList(unitList);
@@ -89,7 +92,39 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             return {...state, unitList:[], detailList: []}
             default:
              return state;
+        case StateActions.SAVE_PLAN:
+            saveUnitList(state)
+            return state;
     }
 }
 
 export default stateReducer;
+
+
+
+var textFile: any = null
+var makeJSONFile = function (text: string) {
+    var data = new Blob([text], {type: 'application/json'});
+    if (textFile !== null) {
+      window.URL.revokeObjectURL(textFile);
+    }
+    textFile = window.URL.createObjectURL(data);
+    return textFile;
+  };
+  var makeTextFile = function (text: string) {
+    var data = new Blob([text], {type: 'text/html'});
+    if (textFile !== null) {
+      window.URL.revokeObjectURL(textFile);
+    }
+    textFile = window.URL.createObjectURL(data);
+    return textFile;
+  };
+
+
+  function saveUnitList(state: State){
+    var contents=state.unitList.map((u: TUnit)=>`${u.groupName};${u.name};${u.count};${u.materialsCount};${u.materials.join(';')};${u.rootGroupName}`).join('\r\n')
+    var link = document.createElement('a');
+    link.setAttribute('download', "project.pln");
+    link.href = makeTextFile(contents);
+    link.click()
+}

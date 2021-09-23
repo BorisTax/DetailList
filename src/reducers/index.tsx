@@ -35,7 +35,7 @@ export type Messages = {
 }
 export type Action = {
     type:string
-    payload?:object
+    payload?:any
 }
 
 export default rootReducer

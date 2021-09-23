@@ -1,23 +1,21 @@
-import React,{ FC } from 'react';
+import React from 'react';
 import '../Graph.css';
 import '../Buttons.css';
-//import {showAlert, blink} from '../actions/AppActions';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Messages, RootState } from '../reducers';
+import { MessagesActions } from '../actions/MessagesActions';
 
-const Alert: FC = (props) => {
-
+const Alert = () => {
+        const state: Messages = useSelector((store: RootState) => store.messages)
+        const dispatch = useDispatch()
         return ( 
             <div className='modalContainer  noselect'>
-                    <div className={"toolBar"} onClick={(e)=>{e.stopPropagation()}}>
+                    <div className={"toolBar toolBarDialog"} onClick={(e)=>{e.stopPropagation()}}>
                         <div>
-                        {//props.captions.messages[this.props.messageKey]
-                        }
+                        {state.title}
                         </div>
                         <div className="flexCenter">
-                        <button onClick={()=>{
-                            //this.props.hideAlert()}
-                        }}
-                            >OK</button>
+                        <button onClick={()=>{dispatch(MessagesActions.hideDialogs())}}>OK</button>
                         </div>    
                     </div>
                 </div>)

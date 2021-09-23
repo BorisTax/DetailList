@@ -149,6 +149,9 @@ td{
 #open{
   background: url('../images/icons/open.png') no-repeat;
 }
+#save{
+  background: url('../images/icons/save.png') no-repeat;
+}
 #add{
   background: url('../images/icons/add.png') no-repeat;
 }
