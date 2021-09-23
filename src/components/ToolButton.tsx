@@ -8,7 +8,7 @@ export default function ToolButton(props: IToolButtonProps){
                 id={props.id}
                 className={className+" noselect"}
                 title={props.title}
-                onClick={()=>{if(!props.disabled)props.onClick()}}
+                onClick={(e)=>{if(!props.disabled){e.stopPropagation();props.onClick()}}}
                 onMouseDown={()=>{setPressed(true)}}
                 onMouseUp={()=>{setPressed(false)}}
                 onMouseLeave={()=>{setPressed(false)}}
@@ -21,6 +21,6 @@ interface IToolButtonProps {
         disabled?:boolean
         id:string
         title?:string
-        onClick:()=>void
+        onClick:() => void
 
 }

@@ -14,6 +14,7 @@ const DetailListBar: FC = (props) => {
     console.log(materialSet)
     const [currentMaterialIndex, setCurrentMaterialIndex] = useState(0)
     const header=<tr>
+                <th>№</th>
                 <th>Название</th>
                 <th>Длина</th>
                 <th>Ширина</th>
@@ -32,6 +33,7 @@ const DetailListBar: FC = (props) => {
             if(d.edgeWidth1||d.edgeWidth2) edgeWidth="singleEdge"
             if(d.edgeWidth1&&d.edgeWidth2) edgeWidth="doubleEdge"
             return <tr key={index}>
+                    <td className="tdLeft">{index+1}</td>
                     <td className="tdLeft">{d.name}</td>
                     <td className={edgeLength}>{d.length}</td>
                     <td className={edgeWidth}>{d.width}</td>

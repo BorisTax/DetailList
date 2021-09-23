@@ -36,7 +36,7 @@ const LibraryBar: FC = (props) => {
     const activeUnitDiv=<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",margin:"5px 0px"}}>
                             <span>{activeUnitShort}</span>
                             <div style={{display:"flex",alignItems:"center"}}>
-                            <Counter value={state.activeUnitCount} min={1} max={10000} setValue={(value)=>dispatch(StateActions.setActiveUnitCount(value))}/>
+                            <Counter value={state.activeUnitCount} ten={true} min={1} max={10000} setValue={(value)=>dispatch(StateActions.setActiveUnitCount(value))}/>
                             <button onClick={()=>dispatch(StateActions.addActiveUnit())}>{"Добавить в план >>"}</button>
                             </div>
                         </div>

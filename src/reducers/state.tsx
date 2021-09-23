@@ -2,14 +2,14 @@ import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
 import { TUnit } from "../data/types";
-export const initLybrary={
+export const initLibrary={
         type:"",
         version:"",
         materials: [],
         rootGroups:[]
 }
 const initialState: State={
-    library: initLybrary,
+    library: initLibrary,
     detailList: [],
     unitList: [],
     materials:[],
@@ -49,6 +49,10 @@ const stateReducer = (state : State = initialState, action : Action)=>{
                 return {...state, detailList: dList, activeUnitCount:1}
         case StateActions.SET_ACTIVE_UNIT_COUNT:
                     return {...state, activeUnitCount: payload}
+        case StateActions.SET_UNIT_COUNT_IN_PLAN:
+            state.unitList[payload.index].count=payload.value
+            const detailList = UnitListWorker.makeDetailList(state.unitList)
+            return {...state, detailList}
         case StateActions.SET_LIBRARY:
             const activeFields={
                 activeRootGroupIndex : 0, 
@@ -77,6 +81,12 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             const materialIndex = state.library.materials.findIndex(m => m.name===payload.material)
             state.activeLibraryMaterials[payload.index] = materialIndex
             return {...state}
+        case StateActions.DELETE_SELECTED_UNITS_IN_PLAN:
+            const unitList = state.unitList.filter((_, index) => !payload[index])
+            const detList = UnitListWorker.makeDetailList(unitList);
+            return {...state, unitList, detailList: detList}
+        case StateActions.CLEAR_PLAN:
+            return {...state, unitList:[], detailList: []}
             default:
              return state;
     }

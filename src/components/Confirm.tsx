@@ -1,18 +1,20 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { MessagesActions } from '../actions/MessagesActions';
 
-const Confirm:FC = (props) => {
+export type ConfirmProps = {
+    title:string
+    onOkAction:()=>void
+}
 
+const Confirm = (props: ConfirmProps) => {
+        const dispatch = useDispatch()
         return <div className='modalContainer  noselect'>
-                    <div className={"toolBar"} onClick={(e)=>{e.stopPropagation()}}>
-                      <div>{
-                      //this.props.captions.messages[this.props.messageKey]
-                    }</div>
+                    <div className={"toolBar toolBarDialog"} onClick={(e)=>{e.stopPropagation()}}>
+                      <div>{props.title}</div>
                         <div className="flexCenter">
-                        <button onClick={()=>{
-                            //this.props.hideConfirm()
-                        }}
-                            >OK</button>
-                        <button onClick={()=>{}}>{}</button>
+                        <button onClick={()=>{dispatch(props.onOkAction());dispatch(MessagesActions.hideDialogs())}}>OK</button>
+                        <button onClick={()=>{dispatch(MessagesActions.hideDialogs())}}>{'Отмена'}</button>
                         </div>
                     </div>
                 </div> 

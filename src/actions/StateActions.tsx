@@ -9,7 +9,8 @@ export const StateActions={
     SET_LIBRARY:"SET_LIBRARY",
     SET_INFORMATION:'SET_INFORMATION',
     SET_MATERIAL:'SET_MATERIAL',
-    SET_ACTIVE_UNIT_COUNT:'SET_ACTIVE_UNIT_COUNT',    
+    SET_ACTIVE_UNIT_COUNT:'SET_ACTIVE_UNIT_COUNT',  
+    SET_UNIT_COUNT_IN_PLAN:'SET_UNIT_COUNT_IN_PLAN',    
     SET_ACTIVE_ROOT_GROUP:'SET_ACTIVE_ROOT_GROUP',
     SET_ACTIVE_GROUP:'SET_ACTIVE_GROUP',
     SET_ACTIVE_UNIT:'SET_ACTIVE_UNIT',
@@ -22,7 +23,8 @@ export const StateActions={
     ADD_ACTIVE_UNIT:'ADD_ACTIVE_UNIT',
     SET_ACTIVE_TABLE:"SET_ACTIVE_TABLE",
     SET_COMPLECT_COUNT:"SET_COMPLECT_COUNT",
-    DELETE_ACTIVE_TABLE:"DELETE_ACTIVE_TABLE",
+    DELETE_SELECTED_UNITS_IN_PLAN:"DELETE_SELECTED_UNITS_IN_PLAN",
+    CLEAR_PLAN:'CLEAR_PLAN',
     DELETE_TABLE_CONFIRM:"DELETE_TABLE_CONFIRM",
     ADD_TABLE:"ADD_TABLE",
     UPDATE_STATE:"UPDATE_STATE",
@@ -125,6 +127,12 @@ setActiveUnitCount:(value:number)=>{
                 payload:value,
             }
         },
+ setUnitCountInPlan:(index:number,value:number)=>{
+     return {
+             type:StateActions.SET_UNIT_COUNT_IN_PLAN,
+             payload:{index,value},
+         }
+     },
 addActiveUnit:()=>{
         return {
                 type:StateActions.ADD_ACTIVE_UNIT,
@@ -136,7 +144,17 @@ deleteTableConfirm:()=>{
           type:StateActions.DELETE_TABLE_CONFIRM,
         }
    },
-
+deleteSelectedUnitsInPlan:(selectedUnits: boolean[])=>{
+    return {
+          type:StateActions.DELETE_SELECTED_UNITS_IN_PLAN,
+          payload: selectedUnits
+        }
+   },
+clearPlan:()=>{
+    return {
+          type:StateActions.CLEAR_PLAN,
+        }
+   },
 loadDetailList:()=>{
     return (dispatch: AppDispatch)=>{
         var input = document.createElement('input');

@@ -21,7 +21,7 @@ export class UnitListWorker {
         return UnitListWorker.makeDetailList(unitList)
     }
 
-    private static makeDetailList = (unitList: TUnit[]): TDetail[] => {
+    public static makeDetailList = (unitList: TUnit[]): TDetail[] => {
         const detailList: TDetail[] = []
         for(const unit of unitList){
             for(const detail of unit.details){
@@ -58,7 +58,7 @@ export class LibraryWorker{
 const isEqualDetail=(det1:TDetail,det2:TDetail):boolean => {
     return (det1.name===det2.name&&
             det1.length===det2.length&&
-            det1.width&&det2.width&&
+            det1.width===det2.width&&
             det1.material === det2.material&&
             det1.edgeLength1===det2.edgeLength1&&
             det1.edgeLength2===det2.edgeLength2&&
