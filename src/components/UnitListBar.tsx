@@ -20,8 +20,20 @@ const UnitListBar: FC = (props) => {
         selRows[index] = !selRows[index]
         return selRows
     }
+    const moveSelectedRowUp = (index: number) => {
+        const selRows = [...selectedRows]
+        selRows[index-1]=true
+        selRows[index]=false
+        return selRows
+    } 
+    const moveSelectedRowDown = (index: number) => {
+        const selRows = [...selectedRows]
+        selRows[index+1]=true
+        selRows[index]=false
+        return selRows
+    } 
+    const onlySelectedRowIndexes = selectedRows.map((r,index)=>r?index:-1).filter(r=>r>=0)
     const dispatch = useDispatch()
-    
     const header=<tr>
             <th>№</th>
             <th>Вид</th>
@@ -31,11 +43,12 @@ const UnitListBar: FC = (props) => {
             <th>Материал 2</th>
             </tr>
     const units = state.unitList.map((u: TUnit, index:number) => {
+            const count=(selectedRows[index]&&(onlySelectedRowIndexes.length===1))?<Counter value={u.count} min={1} max={1000} setValue={(value)=>dispatch(StateActions.setUnitCountInPlan(index,value))} />:u.count
             return <tr key={index} className={selectedRows[index]?`trSelected`:''} onClick={(e) => {setSelectedRows(setSelected(index, e.shiftKey));e.stopPropagation()}}>
                     <td className="tdLeft">{index+1}</td>
                     <td className="tdLeft">{u.groupName}</td>
                     <td className="tdLeft">{u.name}</td>
-                    <td><Counter value={u.count} min={1} max={1000} setValue={(value)=>dispatch(StateActions.setUnitCountInPlan(index,value))} /></td>
+                    <td>{count}</td>
                     {u.materials.map((m, index)=><td key={index}>{m}</td>)}
                 </tr>
     })
@@ -47,6 +60,8 @@ const UnitListBar: FC = (props) => {
                 <ToolButton id={"open"} title={"Загрузить список"} onClick={() => dispatch(MessagesActions.openPlan(state.library))} />
                 <ToolButton id={"save"} title={"Сохранить список"} onClick={() => dispatch(StateActions.savePlan())} disabled={state.unitList.length===0}/>
                 <ToolButton id={"delete"} title={"Удалить выделенные строки"} onClick={() => dispatch(MessagesActions.confirmDeletingUnitsFromPlan(selectedRows))} disabled={selectedRows.every(r=>!r)||(selectedRows.length===0)}/>
+                <ToolButton id={"up"} title={"Переместить вверх"} onClick={() => {dispatch(StateActions.moveUp(onlySelectedRowIndexes[0]));setSelectedRows(moveSelectedRowUp(onlySelectedRowIndexes[0]))}} disabled={(onlySelectedRowIndexes.length!==1)||(selectedRows[0])}/>
+                <ToolButton id={"down"} title={"Переместить вниз"} onClick={() => {dispatch(StateActions.moveDown(onlySelectedRowIndexes[0]));;setSelectedRows(moveSelectedRowDown(onlySelectedRowIndexes[0]))}} disabled={(onlySelectedRowIndexes.length!==1)||(selectedRows[selectedRows.length-1])}/>
             </ToolButtonBar>
             <table style={{fontSize:"small"}}>
                 {header}

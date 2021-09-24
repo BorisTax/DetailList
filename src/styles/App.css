@@ -105,7 +105,7 @@ td{
   background-size: 100%;
   width: 27px;
   height: 27px;
-  mix-blend-mode: multiply;
+  mix-blend-mode: overlay;
 }
 .toolBarHeader{
   display: flex;
@@ -145,7 +145,12 @@ td{
   background: url('../images/icons/fra.png') no-repeat;
   background-size: 100%;
 }
-
+#giblab{
+  background: url('../images/icons/giblab.png') no-repeat;
+}
+#basis{
+  background: url('../images/icons/basis.png') no-repeat;
+}
 #open{
   background: url('../images/icons/open.png') no-repeat;
 }
@@ -178,6 +183,12 @@ td{
 }
 #right{
   background: url('../images/icons/right.png') no-repeat;
+}
+#up{
+  background: url('../images/icons/up.png') no-repeat;
+}
+#down{
+  background: url('../images/icons/down.png') no-repeat;
 }
 #minimize{
   background: url('../images/icons/minimize.png') no-repeat;

@@ -25,15 +25,36 @@ export const StateActions={
     ADD_DETAIL:'ADD_DETAIL',
     ADD_ACTIVE_UNIT:'ADD_ACTIVE_UNIT',
     SET_ACTIVE_TABLE:"SET_ACTIVE_TABLE",
-    SET_COMPLECT_COUNT:"SET_COMPLECT_COUNT",
+    GROUP_DETAILS_BY_UNITS:"GROUP_DETAILS_BY_UNITS",
     DELETE_SELECTED_UNITS_IN_PLAN:"DELETE_SELECTED_UNITS_IN_PLAN",
     CLEAR_PLAN:'CLEAR_PLAN',
     DELETE_TABLE_CONFIRM:"DELETE_TABLE_CONFIRM",
     ADD_TABLE:"ADD_TABLE",
     UPDATE_STATE:"UPDATE_STATE",
+    MOVE_UP:'MOVE_UP',
+    MOVE_DOWN:'MOVE_DOWN',
+    SHOW_EDGE_COLUMN:"SHOW_EDGE_COLUMN",
 updateState(){
     return {
         type:StateActions.UPDATE_STATE
+    }
+},
+moveUp(index:number){
+    return {
+        type:StateActions.MOVE_UP,
+        payload: index
+    }
+},
+moveDown(index:number){
+    return {
+        type:StateActions.MOVE_DOWN,
+        payload: index
+    }
+},
+groupDetailsByUnits(value: boolean){
+    return {
+        type:StateActions.GROUP_DETAILS_BY_UNITS,
+        payload: value
     }
 },
 saveProject(){
@@ -164,6 +185,12 @@ deleteSelectedUnitsInPlan:(selectedUnits: boolean[])=>{
 clearPlan:()=>{
     return {
           type:StateActions.CLEAR_PLAN,
+        }
+   },
+showEdgeColumn:(value: boolean)=>{
+    return {
+          type:StateActions.SHOW_EDGE_COLUMN,
+          payload: value
         }
    },
 loadDetailList:()=>{

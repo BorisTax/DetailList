@@ -26,6 +26,8 @@ export type State = {
     activeUnitIndex:number
     activeLibraryMaterials:number[]
     activeUnitCount:number
+    groupDetailsByUnits:boolean
+    showEdgeColumn: boolean
 }
 export type Messages = {
         type:'alert'|'confirm'

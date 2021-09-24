@@ -8,6 +8,19 @@ export class DetailListWorker {
 }
 
 export class UnitListWorker {
+    public static composeUnitList(list1: TUnit[], list2: TUnit[]) : TUnit[] {   
+        const unitList : TUnit[] = []
+        for(const u of list1){
+            const index = unitList.findIndex((unit: TUnit)=>isEqualUnit(unit,u))  
+            if(index<0) unitList.push(u);else unitList[index].count+=u.count
+        }   
+        for(const u of list2){
+            const index = unitList.findIndex((unit: TUnit)=>isEqualUnit(unit,u))  
+            if(index<0) unitList.push(u);else unitList[index].count+=u.count
+        }  
+        return unitList
+    }   
+
     public static addUnit=(unitList: TUnit[], unit: TUnit):TDetail[] => {
         let inList:boolean = false
         for(const u of unitList){
@@ -21,21 +34,19 @@ export class UnitListWorker {
         return UnitListWorker.makeDetailList(unitList)
     }
 
-    public static makeDetailList = (unitList: TUnit[]): TDetail[] => {
+    public static makeDetailList = (unitList: TUnit[], groupDetailsByUnits: boolean = true): TDetail[] => {
         const detailList: TDetail[] = []
         for(const unit of unitList){
             for(const detail of unit.details){
-                //detail.count = detail.count
                 detail.modules = new Map()
                 detail.modules.set(unit.shortName,detail.count * unit.count)
                 detail.material = unit.materials[detail.materialId]
+                detail.edgeColumn=LibraryWorker.makeEdgeColumn(detail)
                 const det = detailList.find((d:TDetail) => isEqualDetail(detail,d))
-                if(det){
+                if(det&&groupDetailsByUnits){
                     det.count += detail.count * unit.count
                     for(const key of detail.modules)
-                            //if(det.modules?.has(key[0])){
                                 det.modules?.set(key[0], det.modules.get(key[0])||0 + (detail.modules.get(key[0])||0))
-                            //}//else det.modules?.set(key[0], det.modules.get(key[0])||0 + ((detail.modules.get(key[0])||0) * unit.count)
                 }else{
                     detailList.push({...detail, count: detail.count * unit.count})
                 }
@@ -109,7 +120,18 @@ export class LibraryWorker{
         const unit: TLibraryUnit|undefined = group?.units.find((u: TLibraryUnit) => u.name === name)
         return unit
         }
-    
+    public static makeEdgeColumn(detail: TDetail){
+        const edgeSet:any = {}
+        if(!edgeSet[detail.edgeLength1]) edgeSet[detail.edgeLength1]='Д'
+        if(!edgeSet[detail.edgeLength2]) edgeSet[detail.edgeLength2]='Д';else edgeSet[detail.edgeLength2]+='Д'
+        if(!edgeSet[detail.edgeWidth1]) edgeSet[detail.edgeWidth1]='Ш';else edgeSet[detail.edgeWidth1]+='Ш'
+        if(!edgeSet[detail.edgeWidth2]) edgeSet[detail.edgeWidth2]='Ш';else edgeSet[detail.edgeWidth2]+='Ш'
+        let s=''
+        for(let key in edgeSet){
+            if((key)!=="0") s=s+`${key}мм-${edgeSet[key]}; `
+        }
+        return s
+    }
 }
 
 const isEqualDetail=(det1:TDetail,det2:TDetail):boolean => {

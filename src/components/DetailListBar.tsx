@@ -1,27 +1,25 @@
 import React, { FC, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import '../styles/App.css';
 import { TDetail } from '../data/types';
 import { RootState } from '../reducers';
 import ComboBox from './ComboBox';
 import ToolBar from './ToolBar';
+import CheckBox from './CheckBox';
+import { StateActions } from '../actions/StateActions';
+import ToolButtonBar from './ToolButtonBar';
+import ToolButton from './ToolButton';
 
 const DetailListBar: FC = (props) => {
     const state = useSelector((store: RootState)=>store.state)
+    const dispatch = useDispatch()
     const materialSet = new Set()
     state.detailList.forEach((d: TDetail) => {if(!materialSet.has(d.material)) materialSet.add(d.material)})
     const curMaterials:string[] = Array.from(materialSet) as string[]
-    console.log(materialSet)
     const [currentMaterialIndex, setCurrentMaterialIndex] = useState(0)
+    const heads=state.showEdgeColumn?['№','Название','Длина','Ширина','Кол-во','Кромка','Паз','Прим.','Модуль']:['№','Название','Длина','Ширина','Кол-во','Паз','Прим.','Модуль']
     const header=<tr>
-                <th>№</th>
-                <th>Название</th>
-                <th>Длина</th>
-                <th>Ширина</th>
-                <th>Кол-во</th>
-                <th>Паз</th>
-                <th>Прим.</th>
-                <th>Модуль</th>
+                    {heads.map(h=><th key={h}>{h}</th>)}
                 </tr>
     const details = state.detailList.filter((d: TDetail) => d.material === curMaterials[currentMaterialIndex]).map((d: TDetail,index:number) => {
             let modules: string[] = []
@@ -32,20 +30,29 @@ const DetailListBar: FC = (props) => {
             if(d.edgeLength1&&d.edgeLength2) edgeLength="doubleEdge"
             if(d.edgeWidth1||d.edgeWidth2) edgeWidth="singleEdge"
             if(d.edgeWidth1&&d.edgeWidth2) edgeWidth="doubleEdge"
+            const td=[]
+            td.push(<td className="tdLeft">{index+1}</td>)
+            td.push(<td className="tdLeft">{d.name}</td>)
+            td.push(<td className={edgeLength}>{d.length}</td>)
+            td.push(<td className={edgeWidth}>{d.width}</td>)
+            td.push(<td>{d.count}</td>)
+            if(state.showEdgeColumn) td.push(<td>{d.edgeColumn}</td>)
+            td.push(<td>{d.paz}</td>)
+            td.push(<td>{d.comment}</td>)
+            td.push(<td className="tdLeft">{modules.join(', ')}</td>)
             return <tr key={index}>
-                    <td className="tdLeft">{index+1}</td>
-                    <td className="tdLeft">{d.name}</td>
-                    <td className={edgeLength}>{d.length}</td>
-                    <td className={edgeWidth}>{d.width}</td>
-                    <td>{d.count}</td>
-                    <td>{d.paz}</td>
-                    <td>{d.comment}</td>
-                    <td className="tdLeft">{modules.join(', ')}</td>
+                    {td}
                 </tr>
     })
         return (
         <>
         <ToolBar caption={`Общий список деталей`}>
+            <ToolButtonBar>
+                <ToolButton id={"giblab"} title={"Экспорт в Giblab"} onClick={() => {}} disabled={state.detailList.length===0}/>
+                <ToolButton id={"basis"} title={"Экспорт в Базис-Раскрой"} onClick={() => {}} disabled={state.detailList.length===0}/>
+            </ToolButtonBar>
+            <CheckBox value={state.groupDetailsByUnits} title={"Объединять детали по модулям"} onChange={(value)=>dispatch(StateActions.groupDetailsByUnits(value))}/>
+            <CheckBox value={state.showEdgeColumn} title={"Отображать доп. столбец по кромке"} onChange={(value)=>dispatch(StateActions.showEdgeColumn(value))}/>
             <ComboBox title={"Материал:"} items={curMaterials} value={curMaterials[currentMaterialIndex]} onChange={(value=>setCurrentMaterialIndex(value))}/>
             <table>
                 {header}

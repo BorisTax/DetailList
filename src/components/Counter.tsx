@@ -22,7 +22,7 @@ export default function Counter(props: ICounterProps){
             props.setValue(props.value + 10)
         }
         }}/>:<></>
-    return <span style={{display:"flex",alignItems:"center"}}>{decreaseTenButton}{decreaseButton}{props.value}{increaseButton}{increaseTenButton}</span>
+    return <span style={{display:"flex",justifyContent:"center", alignItems:"center"}}>{decreaseTenButton}{decreaseButton}{props.value}{increaseButton}{increaseTenButton}</span>
 }
 
 interface ICounterProps {

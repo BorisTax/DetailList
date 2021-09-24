@@ -12,6 +12,7 @@ export type TDetail = {
     paz:string
     comment:string
     modules?:Map<string, number>
+    edgeColumn?:string
 }
 export type TUnit = {
     name:string

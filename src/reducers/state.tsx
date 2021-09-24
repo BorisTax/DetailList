@@ -1,7 +1,7 @@
 import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
-import { TUnit } from "../data/types";
+import { TDetail, TUnit } from "../data/types";
 export const initLibrary={
         type:"",
         version:"",
@@ -20,8 +20,9 @@ const initialState: State={
     activeUnit:"",
     activeUnitIndex:0,
     activeLibraryMaterials:[],
-    activeUnitCount: 1
-
+    activeUnitCount: 1,
+    groupDetailsByUnits:true,
+    showEdgeColumn: false,
 }
 const stateReducer = (state : State = initialState, action : Action)=>{
     const payload:any = action.payload
@@ -31,6 +32,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     var activeRootGroup:string
     var activeGroup:string
     var activeUnit:string
+    var detailList: TDetail[]
     switch (action.type){
             case StateActions.ADD_ACTIVE_UNIT:
                 const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
@@ -47,11 +49,14 @@ const stateReducer = (state : State = initialState, action : Action)=>{
                 }
                 const dList = UnitListWorker.addUnit(state.unitList,newUnit)
                 return {...state, detailList: dList, activeUnitCount:1}
+        case StateActions.GROUP_DETAILS_BY_UNITS:
+                detailList = UnitListWorker.makeDetailList(state.unitList, payload)
+                return {...state, detailList, groupDetailsByUnits: payload}
         case StateActions.SET_ACTIVE_UNIT_COUNT:
                     return {...state, activeUnitCount: payload}
         case StateActions.SET_UNIT_COUNT_IN_PLAN:
             state.unitList[payload.index].count=payload.value
-            const detailList = UnitListWorker.makeDetailList(state.unitList)
+            detailList = UnitListWorker.makeDetailList(state.unitList)
             return {...state, detailList}
         case StateActions.SET_LIBRARY:
             const activeFields={
@@ -90,10 +95,26 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             return {...state, unitList, detailList: detList}
         case StateActions.CLEAR_PLAN:
             return {...state, unitList:[], detailList: []}
-            default:
-             return state;
         case StateActions.SAVE_PLAN:
             saveUnitList(state)
+            return state;
+        case StateActions.MOVE_UP:
+            if(payload>0){
+                const r = state.unitList[payload - 1]
+                state.unitList[payload - 1] = state.unitList[payload]
+                state.unitList[payload] = r
+            }
+            return {...state};
+        case StateActions.MOVE_DOWN:
+            if(payload<state.unitList.length-1){
+                const r = state.unitList[payload+1]
+                state.unitList[payload + 1] = state.unitList[payload]
+                state.unitList[payload] = r
+            }
+            return {...state};            
+        case StateActions.SHOW_EDGE_COLUMN:
+            return {...state, showEdgeColumn: payload};
+        default:
             return state;
     }
 }
@@ -103,6 +124,7 @@ export default stateReducer;
 
 
 var textFile: any = null
+// eslint-disable-next-line
 var makeJSONFile = function (text: string) {
     var data = new Blob([text], {type: 'application/json'});
     if (textFile !== null) {
