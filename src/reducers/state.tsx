@@ -1,7 +1,9 @@
 import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
-import { TDetail, TUnit } from "../data/types";
+import { tableToExcel } from "../data/exportExcel";
+import { Giblab } from "../data/exportGiblab";
+import { defaultMaterial, TDetail, TLibrary, TMaterial, TUnit } from "../data/types";
 export const initLibrary={
         type:"",
         version:"",
@@ -33,6 +35,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     var activeGroup:string
     var activeUnit:string
     var detailList: TDetail[]
+    var material
     switch (action.type){
             case StateActions.ADD_ACTIVE_UNIT:
                 const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
@@ -98,6 +101,19 @@ const stateReducer = (state : State = initialState, action : Action)=>{
         case StateActions.SAVE_PLAN:
             saveUnitList(state)
             return state;
+        case StateActions.SAVE_LIBRARY:
+            saveLibrary(state.library)
+            return state;
+        case StateActions.EXPORT_GIBLAB:
+            const material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
+            const forGiblab = Giblab.export(state.unitList, material)
+            exportGiblab(forGiblab);
+            return state;
+        case StateActions.EXPORT_EXCEL:
+            tableToExcel()('resultTable','Смета', 'Ремрайон_смета.xls');
+            //material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
+            //exportGiblab(forGiblab);
+            return state;
         case StateActions.MOVE_UP:
             if(payload>0){
                 const r = state.unitList[payload - 1]
@@ -133,6 +149,7 @@ var makeJSONFile = function (text: string) {
     textFile = window.URL.createObjectURL(data);
     return textFile;
   };
+
   var makeTextFile = function (text: string) {
     var data = new Blob([text], {type: 'text/html'});
     if (textFile !== null) {
@@ -148,5 +165,18 @@ var makeJSONFile = function (text: string) {
     var link = document.createElement('a');
     link.setAttribute('download', "project.pln");
     link.href = makeTextFile(contents);
+    link.click()
+}
+function exportGiblab(contents:string){
+    var link = document.createElement('a');
+    link.setAttribute('download', "project.project");
+    link.href = makeTextFile(contents);
+    link.click()
+}
+function saveLibrary(library: TLibrary){
+    const content = JSON.stringify(library)
+    var link = document.createElement('a');
+    link.setAttribute('download', "library.json");
+    link.href = makeJSONFile(content);
     link.click()
 }

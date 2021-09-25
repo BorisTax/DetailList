@@ -48,13 +48,14 @@ const DetailListBar: FC = (props) => {
         <>
         <ToolBar caption={`Общий список деталей`}>
             <ToolButtonBar>
-                <ToolButton id={"giblab"} title={"Экспорт в Giblab"} onClick={() => {}} disabled={state.detailList.length===0}/>
+                <ToolButton id={"giblab"} title={"Экспорт в Giblab"} onClick={() => {dispatch(StateActions.exportGiblab(curMaterials[currentMaterialIndex]))}} disabled={state.detailList.length===0}/>
                 <ToolButton id={"basis"} title={"Экспорт в Базис-Раскрой"} onClick={() => {}} disabled={state.detailList.length===0}/>
+                <ToolButton id={"excel"} title={"Экспорт в Excel"} onClick={() => {dispatch(StateActions.exportExcel(curMaterials[currentMaterialIndex]))}} disabled={state.detailList.length===0}/>
             </ToolButtonBar>
             <CheckBox value={state.groupDetailsByUnits} title={"Объединять детали по модулям"} onChange={(value)=>dispatch(StateActions.groupDetailsByUnits(value))}/>
             <CheckBox value={state.showEdgeColumn} title={"Отображать доп. столбец по кромке"} onChange={(value)=>dispatch(StateActions.showEdgeColumn(value))}/>
             <ComboBox title={"Материал:"} items={curMaterials} value={curMaterials[currentMaterialIndex]} onChange={(value=>setCurrentMaterialIndex(value))}/>
-            <table>
+            <table id={"resultTable"}>
                 {header}
                 <tbody>
                   {details}  

@@ -1,4 +1,4 @@
-import { TDetail, TLibrary, TLibraryUnit, TLibraryRootGroup, TUnit, TLibraryGroup } from "./types";
+import { TDetail, TLibrary, TLibraryUnit, TLibraryRootGroup, TUnit, TLibraryGroup, IXMLTag } from "./types";
 
 export class DetailListWorker {
     public static getListByMaterial = (detailList :TDetail[], materialName:string):TDetail[] => {
@@ -153,11 +153,29 @@ const isEqualUnit=(unit1:TUnit,unit2:TUnit):boolean => {
         unit1.materials.every((m, index)=>m===unit2.materials[index]));
 }
 
-export class UnitMap{
-    private units = new Map()
-    public has = (key:string):boolean => this.units.has(key)
-    public set = (key:string,value:number):void => {this.units.set(key,value)}
-    public get = (key:string):number => this.units.get(key)
-    public delete = (key:string):boolean => this.units.delete(key)
-    public clear = ():void => {this.units.clear()}
+export class XMLTag implements IXMLTag {
+    private name:string = ""
+    private attributes:Map<string,string>=new Map()
+    private children: IXMLTag[] = []
+    public toString(){
+        let attr=''
+        let s=''
+        this.attributes.forEach((value,key)=>{attr = attr + ` ${key}="${value}"`})
+        s = s + `<${this.name}${attr}`
+        if(this.children.length===0) s = s + '/>';else {
+            s = s + '>'
+            this.children.forEach((c: IXMLTag)=>{s = s + c.toString()})
+            s = s + `</${this.name}>`
+        }
+        return s
+    }
+    public setName(name: string){
+        this.name = name
+    }
+    public addAttribute(key:string, value:string){
+        this.attributes.set(key,value)
+    }
+    public addChild(child: IXMLTag){
+        this.children.push(child)
+    }
 }

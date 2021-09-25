@@ -1,12 +1,14 @@
 import { AppDispatch } from "..";
 
 export const StateActions={
+    EXPORT_GIBLAB:'EXPORT_GIBLAB',
+    EXPORT_EXCEL:'EXPORT_EXCEL',
     SAVE_PROJECT:"SAVE_PROJECT",
     SAVE_PLAN:"SAVE_PLAN",
     SET_PLAN:"SET_PLAN",
     OPEN_PROJECT:"OPEN_PROJECT",
-    OPEN_PLAN:"OPEN_PLAN",
     OPEN_LIBRARY:"OPEN_LIBRARY",
+    SAVE_LIBRARY:"SAVE_LIBRARY",
     OPEN_FAILURE:"OPEN_FAILURE",
     SET_PROJECT:"SET_PROJECT",
     SET_LIBRARY:"SET_LIBRARY",
@@ -34,6 +36,18 @@ export const StateActions={
     MOVE_UP:'MOVE_UP',
     MOVE_DOWN:'MOVE_DOWN',
     SHOW_EDGE_COLUMN:"SHOW_EDGE_COLUMN",
+exportGiblab(material: string){
+        return {
+            type:StateActions.EXPORT_GIBLAB,
+            payload: material
+        }
+    },
+exportExcel(material: string){
+        return {
+            type:StateActions.EXPORT_EXCEL,
+            payload: material
+        }
+    },
 updateState(){
     return {
         type:StateActions.UPDATE_STATE
@@ -67,8 +81,10 @@ savePlan(){
         type:StateActions.SAVE_PLAN
     }
 },
-openPlan(){
-
+saveLibrary(){
+    return {
+        type:StateActions.SAVE_LIBRARY
+    }
 },
 openProject(){
 

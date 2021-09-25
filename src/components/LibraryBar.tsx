@@ -7,6 +7,8 @@ import { RootState, State } from '../reducers';
 import ComboBox from './ComboBox';
 import Counter from './Counter';
 import ToolBar from './ToolBar';
+import ToolButton from './ToolButton';
+import ToolButtonBar from './ToolButtonBar';
 
 const LibraryBar: FC = (props) => {
     const state: State = useSelector((store: RootState)=>store.state)
@@ -45,8 +47,10 @@ const LibraryBar: FC = (props) => {
         <>
         <ToolBar caption={"Библиотека"}>
             <div style={{display:"flex",flexDirection:"column",alignItems:"stretch",fontSize:"small"}}>
-                <button onClick={()=>dispatch(StateActions.openLibrary())}>Загрузить</button>
-                <br/>
+                <ToolButtonBar>
+                    <ToolButton id={"open"} title={"Загрузить"} onClick={()=>dispatch(StateActions.openLibrary())}/>
+                    <ToolButton id={"save"} title={"Сохранить"} onClick={()=>dispatch(StateActions.saveLibrary())} disabled={!state.library.type}/>
+                </ToolButtonBar>
                 {rootGroups.length>0?<div><ComboBox value={activeRootGroup} items={rootGroups} title={`Группа:`} onChange={(value: number)=>{dispatch(StateActions.setActiveRootGroup(value))}}/></div>:<></>}
                 {groups.length>0?<div><ComboBox value={activeGroup} items={groups} title={"Вид:"} onChange={(value: number)=>{dispatch(StateActions.setActiveGroup(value))}}/></div>:<></>}
                 {units?<div><ComboBox value={activeUnit} items={units} title="" size={15} onChange={(value)=>{dispatch(StateActions.setActiveUnit(value))}}/></div>:<></>}

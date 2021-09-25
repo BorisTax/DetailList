@@ -7,7 +7,7 @@ import DetailListBar from './DetailListBar';
 
 const MainContainer:FC = () => { 
   return (
-    <div style={{display:"flex"}}>
+    <div style={{display:"flex",justifyContent:"stretch",flexWrap:"wrap"}}>
     <div className="leftSideBar">  
      <LibraryBar/>
      <DetailBar/>

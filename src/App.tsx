@@ -9,12 +9,11 @@ import Alert from './components/Alert';
 const App:FC = () => { 
   const state = useSelector((store: RootState) => store.messages)
   return (
-      <>
-      
+      <div>
       <MainContainer/>
       {(state.type==='confirm'&&state.show)?<Confirm title={state.title} onOkAction={()=>state.onOkAction()}/>:<></>}
       {(state.type==='alert'&&state.show)?<Alert title={state.title}/>:<></>}
-      </>
+      </div>
   );
 }
 

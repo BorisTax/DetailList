@@ -66,3 +66,15 @@ export type TMaterial={
     kim?:number,
     gloss?:boolean
 }
+export const defaultMaterial: TMaterial ={
+    name:"",
+    length:2800,
+    width:2070,
+    texture:true
+}
+export interface IXMLTag {
+    toString:()=>string
+    setName:(name:string)=>void
+    addAttribute:(key:string,value:string)=>void
+    addChild: (child: IXMLTag)=>void
+}
