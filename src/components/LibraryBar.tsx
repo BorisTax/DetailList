@@ -6,6 +6,7 @@ import { TLibraryGroup, TLibraryRootGroup, TLibraryUnit } from '../data/types';
 import { RootState, State } from '../reducers';
 import ComboBox from './ComboBox';
 import Counter from './Counter';
+import DetailBar from './DetailBar';
 import ToolBar from './ToolBar';
 import ToolButton from './ToolButton';
 import ToolButtonBar from './ToolButtonBar';
@@ -21,6 +22,7 @@ const LibraryBar: FC = (props) => {
     const group: TLibraryGroup|undefined = root?.groups[state.activeGroupIndex]
     const units: string[]|undefined = group?.units.map((u: TLibraryUnit) => u.name)
     const activeUnitShort: string|undefined = group?.units[state.activeUnitIndex].shortName
+    const details = group?.units[state.activeUnitIndex].details
     if(!groups) groups = []
     const materialsList=[]
     for(let i=0;i<group?.units[state.activeUnitIndex].materialsCount;i++)
@@ -51,12 +53,13 @@ const LibraryBar: FC = (props) => {
                     <ToolButton id={"open"} title={"Загрузить"} onClick={()=>dispatch(StateActions.openLibrary())}/>
                     <ToolButton id={"save"} title={"Сохранить"} onClick={()=>dispatch(StateActions.saveLibrary())} disabled={!state.library.type}/>
                 </ToolButtonBar>
-                {rootGroups.length>0?<div><ComboBox value={activeRootGroup} items={rootGroups} title={`Группа:`} onChange={(value: number)=>{dispatch(StateActions.setActiveRootGroup(value))}}/></div>:<></>}
-                {groups.length>0?<div><ComboBox value={activeGroup} items={groups} title={"Вид:"} onChange={(value: number)=>{dispatch(StateActions.setActiveGroup(value))}}/></div>:<></>}
-                {units?<div><ComboBox value={activeUnit} items={units} title="" size={15} onChange={(value)=>{dispatch(StateActions.setActiveUnit(value))}}/></div>:<></>}
+                {rootGroups.length>0?<div><ComboBox value={activeRootGroup} items={rootGroups} title={`Группа:`} onChange={(index: number)=>{dispatch(StateActions.setActiveRootGroup(index))}}/></div>:<></>}
+                {groups.length>0?<div><ComboBox value={activeGroup} items={groups} title={"Вид:"} onChange={(index: number)=>{dispatch(StateActions.setActiveGroup(index))}}/></div>:<></>}
+                {units?<div><ComboBox value={activeUnit} items={units} title="" size={15} onChange={(index)=>{dispatch(StateActions.setActiveUnit(index))}}/></div>:<></>}
                 {materialsDiv}
                 {units?activeUnitDiv:<></>}
             </div>
+            <DetailBar details={details||[]} unitShortName={activeUnitShort}/>
         </ToolBar>
         </>
         );

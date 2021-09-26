@@ -1,16 +1,13 @@
-import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import '../styles/App.css';
-import { TDetail, TLibraryGroup, TLibraryRootGroup, TLibraryUnit } from '../data/types';
-import { RootState } from '../reducers';
-import ToolBar from './ToolBar';
+import { TDetail } from '../data/types';
 
-const DetailBar: FC = (props) => {
-    const state = useSelector((store: RootState)=>store.state)
-    const root: TLibraryRootGroup|undefined = state.library.rootGroups[state.activeRootGroupIndex]
-    const group: TLibraryGroup|undefined = root?.groups[state.activeGroupIndex]
-    const unit: TLibraryUnit|undefined = group?.units[state.activeUnitIndex]
-    const unitShortName = unit?.shortName
+type DetailBarProps = {
+    details: TDetail[]
+    unitShortName: string
+}
+
+const DetailBar = (props: DetailBarProps) => {
     const header=<tr>
                 <th>Название</th>
                 <th>Длина</th>
@@ -19,7 +16,7 @@ const DetailBar: FC = (props) => {
                 <th>Паз</th>
                 <th>Прим.</th>
                 </tr>
-    const details = unit?.details.map((d: TDetail,index:number) => {
+    const details = props.details.map((d: TDetail,index:number) => {
             let edgeLength=""
             let edgeWidth=""
             if(d.edgeLength1||d.edgeLength2) edgeLength="singleEdge"
@@ -37,14 +34,13 @@ const DetailBar: FC = (props) => {
     })
         return (
         <>
-        <ToolBar caption={`Детали ${unitShortName||""}`}>
+        <div>{`Детали ${props.unitShortName||""}`}</div>
             <table>
                 {header}
                 <tbody>
                   {details}  
                 </tbody>
             </table>
-        </ToolBar>
         </>
         );
     }

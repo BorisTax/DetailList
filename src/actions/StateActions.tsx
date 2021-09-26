@@ -20,6 +20,7 @@ export const StateActions={
     SET_ACTIVE_GROUP:'SET_ACTIVE_GROUP',
     SET_ACTIVE_UNIT:'SET_ACTIVE_UNIT',
     SET_ACTIVE_LIBRARY_MATERIAL:'SET_ACTIVE_LIBRARY_MATERIAL',
+    SET_ACTIVE_DETAILLIST_MATERIAL:'SET_ACTIVE_DETAILLIST_MATERIAL',
     SET_DETAIL_PROPERTY:'SET_DETAIL_PROPERTY',
     LOAD_DETAIL_LIST:'LOAD_DETAIL_LIST',
     SET_DETAIL_LIST:'SET_DETAIL_LIST',
@@ -149,6 +150,12 @@ setActiveLibraryMaterial:(index:number, material:string)=>{
         return {
             type:StateActions.SET_ACTIVE_LIBRARY_MATERIAL,
             payload:{index, material},
+        }
+    },
+setActiveDetailListMaterial:(material:string)=>{
+        return {
+            type: StateActions.SET_ACTIVE_DETAILLIST_MATERIAL,
+            payload: material,
         }
     },
 setActiveRootGroup:(value:number)=>{

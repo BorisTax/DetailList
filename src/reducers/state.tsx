@@ -3,7 +3,7 @@ import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
 import { tableToExcel } from "../data/exportExcel";
 import { Giblab } from "../data/exportGiblab";
-import { defaultMaterial, TDetail, TLibrary, TMaterial, TUnit } from "../data/types";
+import { defaultMaterial, TLibrary, TMaterial, TUnit } from "../data/types";
 export const initLibrary={
         type:"",
         version:"",
@@ -15,6 +15,11 @@ const initialState: State={
     detailList: [],
     unitList: [],
     materials:[],
+    information:{
+        order:'',
+        plan:'',
+        date:''
+    },
     activeRootGroup:"",
     activeRootGroupIndex:0,
     activeGroup:"",
@@ -22,6 +27,7 @@ const initialState: State={
     activeUnit:"",
     activeUnitIndex:0,
     activeLibraryMaterials:[],
+    activeDetailListMaterial: '',
     activeUnitCount: 1,
     groupDetailsByUnits:true,
     showEdgeColumn: false,
@@ -34,8 +40,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     var activeRootGroup:string
     var activeGroup:string
     var activeUnit:string
-    var detailList: TDetail[]
-    var material
+    var detailList: any = {}
     switch (action.type){
             case StateActions.ADD_ACTIVE_UNIT:
                 const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
@@ -61,6 +66,8 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             state.unitList[payload.index].count=payload.value
             detailList = UnitListWorker.makeDetailList(state.unitList)
             return {...state, detailList}
+        case StateActions.SET_INFORMATION:
+            return {...state, information: {...payload}}
         case StateActions.SET_LIBRARY:
             const activeFields={
                 activeRootGroupIndex : 0, 
@@ -89,6 +96,8 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             const materialIndex = state.library.materials.findIndex(m => m.name===payload.material)
             state.activeLibraryMaterials[payload.index] = materialIndex
             return {...state}
+        case StateActions.SET_ACTIVE_DETAILLIST_MATERIAL:
+            return {...state, activeDetailListMaterial: payload}
         case StateActions.SET_PLAN:
             const lists={unitList : payload, detailList : UnitListWorker.makeDetailList(payload)}
             return {...state, ...lists}

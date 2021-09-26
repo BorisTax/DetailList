@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { TDetail, TLibrary, TMaterial, TUnit } from "../data/types";
+import { TLibrary, TMaterial, TUnit } from "../data/types";
 import messagesReducer from "./messages";
 import stateReducer from "./state";
 const rootReducer = combineReducers({
@@ -15,9 +15,14 @@ const rootReducer = combineReducers({
 
 export type State = {
     library: TLibrary,
-    detailList: TDetail[]
+    detailList: any
     unitList: TUnit[]
     materials: TMaterial[]
+    information: {
+        order: string
+        plan: string
+        date: string
+    }
     activeRootGroup:string
     activeRootGroupIndex:number
     activeGroup:string
@@ -25,16 +30,19 @@ export type State = {
     activeUnit:string
     activeUnitIndex:number
     activeLibraryMaterials:number[]
+    activeDetailListMaterial:string
     activeUnitCount:number
     groupDetailsByUnits:boolean
     showEdgeColumn: boolean
 }
+
 export type Messages = {
         type:'alert'|'confirm'
         show:boolean
         title:string
         onOkAction:()=>Action
 }
+
 export type Action = {
     type:string
     payload?:any

@@ -35,20 +35,25 @@ export class UnitListWorker {
     }
 
     public static makeDetailList = (unitList: TUnit[], groupDetailsByUnits: boolean = true): TDetail[] => {
-        const detailList: TDetail[] = []
+        const detailList: any = {}//TDetail[] = []
+        const materialSet = new Set()
         for(const unit of unitList){
-            for(const detail of unit.details){
+            for(const d of unit.details){
+                const detail = {...d}
+                const material = unit.materials[detail.materialId]
+                if(!materialSet.has(material)) materialSet.add(material)
+                if(!detailList[material]) detailList[material] = []
                 detail.modules = new Map()
                 detail.modules.set(unit.shortName,detail.count * unit.count)
                 detail.material = unit.materials[detail.materialId]
                 detail.edgeColumn=LibraryWorker.makeEdgeColumn(detail)
-                const det = detailList.find((d:TDetail) => isEqualDetail(detail,d))
+                const det = detailList[material].find((d:TDetail) => isEqualDetail(detail,d))
                 if(det&&groupDetailsByUnits){
                     det.count += detail.count * unit.count
                     for(const key of detail.modules)
                                 det.modules?.set(key[0], det.modules.get(key[0])||0 + (detail.modules.get(key[0])||0))
                 }else{
-                    detailList.push({...detail, count: detail.count * unit.count})
+                    detailList[material].push({...detail, count: detail.count * unit.count})
                 }
             }
         }

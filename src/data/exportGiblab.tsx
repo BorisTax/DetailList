@@ -18,10 +18,12 @@ export class Giblab{
         const edgeSet = new Set()
         for(const u of unitList)
          for(const d of u.details){
-            if(d.edgeLength1>0) edgeSet.add(d.edgeLength1)
-            if(d.edgeLength2>0) edgeSet.add(d.edgeLength2)
-            if(d.edgeWidth1>0) edgeSet.add(d.edgeWidth1)
-            if(d.edgeWidth2>0) edgeSet.add(d.edgeWidth2)
+             if(d.material===material.name){
+                if(d.edgeLength1>0) edgeSet.add(d.edgeLength1)
+                if(d.edgeLength2>0) edgeSet.add(d.edgeLength2)
+                if(d.edgeWidth1>0) edgeSet.add(d.edgeWidth1)
+                if(d.edgeWidth2>0) edgeSet.add(d.edgeWidth2)
+            }
          }
         let op = 0
         for(const edge of edgeSet.keys()) {

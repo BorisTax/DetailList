@@ -6,6 +6,7 @@ import { StateActions } from '../actions/StateActions';
 import { TUnit } from '../data/types';
 import { RootState, State } from '../reducers';
 import Counter from './Counter';
+import InformationBar, { InformationProps } from './InformationBar';
 import ToolBar from './ToolBar';
 import ToolButton from './ToolButton';
 import ToolButtonBar from './ToolButtonBar';
@@ -52,9 +53,12 @@ const UnitListBar: FC = (props) => {
                     {u.materials.map((m, index)=><td key={index}>{m}</td>)}
                 </tr>
     })
+    const info: InformationProps = {...state.information}
         return (
         <>
         <ToolBar caption={"План"} onClick={(e)=>{setSelectedRows(selectedRows.map(r=>false))}}>
+            <InformationBar {...info}/>
+            <hr/>
             <ToolButtonBar>
                 <ToolButton id={"new"} title={"Очистить список"} onClick={() => dispatch(MessagesActions.confirmClearingUnitListInPlan())} disabled={state.unitList.length===0}/>
                 <ToolButton id={"open"} title={"Загрузить список"} onClick={() => dispatch(MessagesActions.openPlan(state.library))} />
