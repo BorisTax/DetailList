@@ -1,10 +1,10 @@
 import jsPDF from "jspdf";
-import autoTable from 'jspdf-autotable'
 import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
 import { createExportTable, tableToExcel } from "../data/exportExcel";
 import { Giblab } from "../data/exportGiblab";
+import { printToPDF } from "../data/printPdf";
 import { defaultMaterial, TLibrary, TMaterial, TUnit } from "../data/types";
 export const initLibrary={
         type:"",
@@ -121,11 +121,9 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             exportGiblab(forGiblab);
             return state;
         case StateActions.EXPORT_EXCEL:
-            const table = createExportTable(state.detailList[payload.material], state.information, payload)
+            //const table = createExportTable(state.detailList[payload.material], state.information, payload)
             //console.log(document.getElementById('exportTable'))
-            const doc = new jsPDF()
-            autoTable(doc, { html: '#exportTable' })
-            doc.save('table.pdf')
+            printToPDF()
             //tableToExcel()(table,'Лист1', `${payload.material}.xls`);
             return state;
         case StateActions.MOVE_UP:
