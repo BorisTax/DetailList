@@ -9,18 +9,20 @@ import CheckBox from './CheckBox';
 import { StateActions } from '../actions/StateActions';
 import ToolButtonBar from './ToolButtonBar';
 import ToolButton from './ToolButton';
+import { UnitListWorker } from '../data/classes';
 
 const DetailListBar: FC = (props) => {
     const state = useSelector((store: RootState)=>store.state)
     const dispatch = useDispatch()
     const curMaterials: string[] = Object.keys(state.detailList)
-    const curMaterial: string = state.activeDetailListMaterial||curMaterials[0]
+    const curMaterialName: string = state.activeDetailListMaterial||curMaterials[0]
     const heads=state.showEdgeColumn?['№','Название','Длина','Ширина','Кол-во','Кромка','Паз','Прим.','Модуль']:['№','Название','Длина','Ширина','Кол-во','Паз','Прим.','Модуль']
     const header=<tr>
                     {heads.map(h=><th key={h}>{h}</th>)}
                 </tr>
-    
-    const details = state.detailList[curMaterial]?.map((d: TDetail,index:number) => {
+    const curMaterial = state.library?.materials.find(m=>m.name===curMaterialName)
+    const {materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(state.detailList, curMaterial)
+    const details = state.detailList[curMaterialName]?.map((d: TDetail,index:number) => {
             let modules: string[] = []
             if ((d.modules?.size||0) > 1) d.modules?.forEach((value, key) => modules.push(`${key}-${value}`)); else modules[0] = d.modules?.keys().next().value;
             let edgeLength=""
@@ -43,17 +45,24 @@ const DetailListBar: FC = (props) => {
                     {td}
                 </tr>
     })
+    const edge = Object.keys(totalEdgeLength).map(edge=><div>{`Кромка ${edge}мм - ${totalEdgeLength[edge]}м`}</div>)
+    const materialDiv = Object.keys(state.detailList).length?<div style={{fontSize:"small"}}>
+                    <CheckBox value={state.groupDetailsByUnits} title={"Объединять детали по модулям"} onChange={(value)=>dispatch(StateActions.groupDetailsByUnits(value))}/>
+                    <CheckBox value={state.showEdgeColumn} title={"Отображать доп. столбец по кромке"} onChange={(value)=>dispatch(StateActions.showEdgeColumn(value))}/>
+                    <ComboBox title={"Материал:"} items={curMaterials} value={curMaterialName} onChange={((_, value)=>dispatch(StateActions.setActiveDetailListMaterial(value)))}/>
+                    <div>{`Размер плиты: ${curMaterial?.length}x${curMaterial?.width}`}</div>
+                    <div>{`Плит: ${materialCount[curMaterialName]}`}</div>
+                    {edge}
+                </div>:<></>
         return (
         <>
         <ToolBar caption={`Общий список деталей`}>
             <ToolButtonBar>
-                <ToolButton id={"giblab"} title={"Экспорт в Giblab"} onClick={() => {dispatch(StateActions.exportGiblab(curMaterial))}} disabled={state.detailList.length===0}/>
-                <ToolButton id={"basis"} title={"Экспорт в Базис-Раскрой"} onClick={() => {}} disabled={state.detailList.length===0}/>
-                <ToolButton id={"excel"} title={"Экспорт в Excel"} onClick={() => {dispatch(StateActions.exportExcel(curMaterial))}} disabled={state.detailList.length===0}/>
+                <ToolButton id={"giblab"} title={"Экспорт в Giblab"} onClick={() => {dispatch(StateActions.exportGiblab(curMaterialName))}} disabled={!details||(details.length===0)}/>
+                <ToolButton id={"basis"} title={"Экспорт в Базис-Раскрой"} onClick={() => {}} disabled={!details||(details.length===0)}/>
+                <ToolButton id={"excel"} title={"Экспорт в Excel"} onClick={() => {dispatch(StateActions.exportExcel(curMaterialName,materialCount[curMaterialName],totalEdgeLength, heads))}} disabled={!details||(details.length===0)}/>
             </ToolButtonBar>
-            <CheckBox value={state.groupDetailsByUnits} title={"Объединять детали по модулям"} onChange={(value)=>dispatch(StateActions.groupDetailsByUnits(value))}/>
-            <CheckBox value={state.showEdgeColumn} title={"Отображать доп. столбец по кромке"} onChange={(value)=>dispatch(StateActions.showEdgeColumn(value))}/>
-            <ComboBox title={"Материал:"} items={curMaterials} value={curMaterial} onChange={((_, value)=>dispatch(StateActions.setActiveDetailListMaterial(value)))}/>
+            {materialDiv}
             <table id={"resultTable"}>
                 {header}
                 <tbody>

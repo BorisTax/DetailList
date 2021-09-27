@@ -59,7 +59,7 @@ const LibraryBar: FC = (props) => {
                 {materialsDiv}
                 {units?activeUnitDiv:<></>}
             </div>
-            <DetailBar details={details||[]} unitShortName={activeUnitShort}/>
+            {details?<DetailBar details={details||[]} unitShortName={activeUnitShort}/>:<></>}
         </ToolBar>
         </>
         );

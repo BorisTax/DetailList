@@ -43,10 +43,10 @@ exportGiblab(material: string){
             payload: material
         }
     },
-exportExcel(material: string){
+exportExcel(material: string, materialCount:number, totalEdgeLength: any, heads: string[]){
         return {
             type:StateActions.EXPORT_EXCEL,
-            payload: material
+            payload: {material, materialCount, totalEdgeLength, heads}
         }
     },
 updateState(){

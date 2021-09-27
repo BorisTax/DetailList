@@ -1,4 +1,4 @@
-import { TDetail, TLibrary, TLibraryUnit, TLibraryRootGroup, TUnit, TLibraryGroup, IXMLTag } from "./types";
+import { TDetail, TLibrary, TLibraryUnit, TLibraryRootGroup, TUnit, TLibraryGroup, IXMLTag, TMaterial } from "./types";
 
 export class DetailListWorker {
     public static getListByMaterial = (detailList :TDetail[], materialName:string):TDetail[] => {
@@ -35,18 +35,16 @@ export class UnitListWorker {
     }
 
     public static makeDetailList = (unitList: TUnit[], groupDetailsByUnits: boolean = true): TDetail[] => {
-        const detailList: any = {}//TDetail[] = []
-        const materialSet = new Set()
+        const detailList: any = {}
         for(const unit of unitList){
             for(const d of unit.details){
                 const detail = {...d}
                 const material = unit.materials[detail.materialId]
-                if(!materialSet.has(material)) materialSet.add(material)
                 if(!detailList[material]) detailList[material] = []
                 detail.modules = new Map()
                 detail.modules.set(unit.shortName,detail.count * unit.count)
                 detail.material = unit.materials[detail.materialId]
-                detail.edgeColumn=LibraryWorker.makeEdgeColumn(detail)
+                detail.edgeColumn = LibraryWorker.makeEdgeColumn(detail)
                 const det = detailList[material].find((d:TDetail) => isEqualDetail(detail,d))
                 if(det&&groupDetailsByUnits){
                     det.count += detail.count * unit.count
@@ -58,6 +56,29 @@ export class UnitListWorker {
             }
         }
         return detailList
+    }
+
+    public static calcDetailsExtra(detailList: any, material: TMaterial = {length:2800,width:2070,name:"",texture:true}){
+        const materialCount: any = {}
+        const totalEdgeLength: any = {}
+        for(const mat in detailList){
+            if(!materialCount[mat]) materialCount[mat] = 0
+            for(const detail of detailList[mat]){
+                if(!totalEdgeLength[`${detail.edgeLength1}`]) totalEdgeLength[`${detail.edgeLength1}`] = 0
+                if(!totalEdgeLength[`${detail.edgeLength2}`]) totalEdgeLength[`${detail.edgeLength2}`] = 0
+                if(!totalEdgeLength[`${detail.edgeWidth1}`]) totalEdgeLength[`${detail.edgeWidth1}`] = 0
+                if(!totalEdgeLength[`${detail.edgeWidth2}`]) totalEdgeLength[`${detail.edgeWidth2}`] = 0
+                totalEdgeLength[`${detail.edgeLength1}`] += detail.edgeLength1?detail.length:0
+                totalEdgeLength[`${detail.edgeLength2}`] += detail.edgeLength2?detail.length:0
+                totalEdgeLength[`${detail.edgeWidth1}`] += detail.edgeWidth1?detail.width:0
+                totalEdgeLength[`${detail.edgeWidth2}`] += detail.edgeWidth2?detail.width:0
+                materialCount[mat] += (detail.length+4) * (detail.width+4)
+            }
+            materialCount[mat] = Math.ceil(materialCount[mat] / (material.length * material.width))
+        }
+        delete(totalEdgeLength['0'])
+        for(const edge in totalEdgeLength) totalEdgeLength[edge] = Math.ceil(totalEdgeLength[edge] * 0.001 * 1.15)
+        return {materialCount, totalEdgeLength}
     }
 
 

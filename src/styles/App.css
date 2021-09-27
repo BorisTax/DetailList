@@ -131,6 +131,12 @@ td{
 .doubleEdge{
   text-decoration: underline double;
 }
+.singleThickEdge{
+  text-decoration: underline 2px;
+}
+.doubleThickEdge{
+  text-decoration: underline double 2px;
+}
 
 #ru{
   background: url('../images/icons/rus.png') no-repeat;
