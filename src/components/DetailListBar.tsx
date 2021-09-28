@@ -46,7 +46,7 @@ const DetailListBar: FC = (props) => {
                 </tr>
     })
     const edge = Object.keys(state.materialData.totalEdgeLength).map(edge=><div>{`Кромка ${edge}мм - ${state.materialData.totalEdgeLength[edge]}м`}</div>)
-    const materialDiv = Object.keys(state.detailList).length?<div style={{fontSize:"small"}}>
+    const materialDiv = curMaterials.length?<div style={{fontSize:"small"}}>
                     <CheckBox value={state.groupDetailsByUnits} title={"Объединять детали по модулям"} onChange={(value)=>dispatch(StateActions.groupDetailsByUnits(value))}/>
                     <CheckBox value={state.showEdgeColumn} title={"Отображать доп. столбец по кромке"} onChange={(value)=>dispatch(StateActions.showEdgeColumn(value))}/>
                     <ComboBox title={"Материал:"} items={curMaterials} value={curMaterialName} onChange={((_, value)=>dispatch(StateActions.setActiveDetailListMaterial(value)))}/>

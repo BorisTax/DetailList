@@ -48,7 +48,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     var activeGroup:string
     var activeUnit:string
     var detailList: any = {}
-    let materialCount = {}
+    let plateCount = {}
     let totalEdgeLength = {}
     switch (action.type){
             case StateActions.ADD_ACTIVE_UNIT:
@@ -65,8 +65,9 @@ const stateReducer = (state : State = initialState, action : Action)=>{
                     materials: mat
                 }
                 const dList:TDetail[] = UnitListWorker.addUnit(state.unitList,newUnit);
-                ({materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(dList, state.library.materials))
-                return {...state, detailList: dList, activeUnitCount: 1, materialData: {materialCount, totalEdgeLength}}
+                ({plateCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(dList, state.library.materials))
+                const activeDetailListMaterial = state.activeDetailListMaterial?state.activeDetailListMaterial:mat[0].name
+                return {...state, detailList: dList, activeUnitCount: 1, activeDetailListMaterial, materialData: {plateCount, totalEdgeLength}}
         case StateActions.GROUP_DETAILS_BY_UNITS:
                 detailList = UnitListWorker.makeDetailList(state.unitList, payload)
                 return {...state, detailList, groupDetailsByUnits: payload}
@@ -110,13 +111,13 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             return {...state, activeDetailListMaterial: payload}
         case StateActions.SET_PLAN:
             const lists={unitList : payload, detailList : UnitListWorker.makeDetailList(payload)};
-            ({materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(lists.detailList, state.library.materials))
-            return {...state, ...lists, materialData: {materialCount, totalEdgeLength} }
+            ({plateCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(lists.detailList, state.library.materials))
+            return {...state, ...lists, materialData: {plateCount, totalEdgeLength} }
         case StateActions.DELETE_SELECTED_UNITS_IN_PLAN:
             const unitList = state.unitList.filter((_, index) => !payload[index])
             const detList = UnitListWorker.makeDetailList(unitList);
-            ({materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(detList, state.library.materials))
-            return {...state, unitList, detailList: detList, materialData: {materialCount, totalEdgeLength} }
+            ({plateCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(detList, state.library.materials))
+            return {...state, unitList, detailList: detList, materialData: {plateCount, totalEdgeLength} }
         case StateActions.CLEAR_PLAN:
             return {...state, unitList:[], detailList: []}
         case StateActions.SAVE_PLAN:

@@ -10,7 +10,7 @@ export default class TextShape{
         this.p=point;
         this.text=text;
         this.anchor=anchor;
-        this.lineBreak = 2
+        this.lineBreak = 0
         this.underlines = underlines
         this.width = 0
         this.height = 0
@@ -18,7 +18,7 @@ export default class TextShape{
     draw(ctx, fontSize){
         let width = this.width
         let height = this.height
-        const {width: textWidth, height: textHeight, lineHeight} = this.getTextRect(ctx, fontSize);
+        const {width: textWidth, height: textHeight, singleTextLineHeight} = this.getTextRect(ctx, fontSize);
         let x=0
         let y=0
         switch(this.anchor.horizontal){
@@ -49,35 +49,39 @@ export default class TextShape{
         ctx.lineWidth = 1
         for(const t of this.text){
             ctx.fillText(t, x, y);
-            y -= (lineHeight + this.lineBreak)
+            y += (this.singleTextLineHeight + this.lineBreak-2)
         }
-        y = this.basePoint.y+2
-        for(const line of this.underlines){
+        y = this.basePoint.y
+        this.underlines.reduce((prevLine,line)=>{
+            y += (line + prevLine)
             ctx.beginPath()
             ctx.lineWidth = line
             ctx.moveTo(x, Math.trunc(y) + 0.5)
             ctx.lineTo(x + textWidth, Math.trunc(y) + 0.5)
             ctx.stroke()
-            y += (line + 2)
-        }
+            return line
+            //y += (line+2)
+        },0)
     }
     getTextRect(ctx,fontSize){
         ctx.font = `${fontSize}px serif`;
         let width = 0
         let height = 0
-        let lineHeight = 0
+        let singleTextLineHeight = 0
+        let textHeight = 0
         for(const t of this.text){
             const textMetrics = ctx.measureText(t)
             if(width < textMetrics.width) width = textMetrics.width
-            lineHeight = textMetrics.actualBoundingBoxAscent + textMetrics.fontBoundingBoxDescent
-            height += lineHeight
+            singleTextLineHeight = textMetrics.actualBoundingBoxAscent + textMetrics.fontBoundingBoxDescent
+            height += singleTextLineHeight
         }
         const underlineHeight = this.underlines.length>0?this.underlines.reduce((a,i)=>a+i,0):0
+        textHeight = height
         height += (this.text.length - 1) * this.lineBreak + underlineHeight
         width = Math.trunc(width)
         height = Math.trunc(height)
-        lineHeight = Math.trunc(lineHeight)
-        return {width, height, lineHeight};
+        singleTextLineHeight = Math.trunc(singleTextLineHeight)
+        return {width, height, textHeight, singleTextLineHeight, underlineHeight};
     }
 
     setText(text){
@@ -95,9 +99,11 @@ export default class TextShape{
     setAnchor(anchor){
         this.anchor={...this.anchor,...anchor};
     }
-    setBoundingBox(width, height){
+    setDimensions(width, height, textHeight, singleTextLineHeight){
         this.width = width
         this.height = height
+        this.textHeight = textHeight
+        this.singleTextLineHeight = singleTextLineHeight
     }
 
 

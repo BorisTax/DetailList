@@ -3,7 +3,7 @@ export default class TableCellShape{
     constructor({text, underlines = [], frame = true, padding = 2, align = TextShape.CENTER}){
         this.topLeft = {x:0, y:0}
         this.align = align;
-        this.caption = [text]
+        this.caption = text
         this.captionShape = new TextShape(this.caption, underlines)
         this.padding = padding
         this.frame = frame
@@ -34,6 +34,7 @@ export default class TableCellShape{
                 break;
             default:
         }
+        point.y = this.topLeft.y + this.singleTextLineHeight
         this.captionShape.setBasePoint(point);
         this.captionShape.setAnchor({horizontal : this.align, vertical : TextShape.CENTER});
         this.captionShape.draw(ctx,fontSize)
@@ -54,15 +55,17 @@ export default class TableCellShape{
     }
     getOwnDimensions(ctx, fontSize){
         ctx.font = `${fontSize}px serif`;
-        let {width, height} = this.captionShape.getTextRect(ctx, fontSize)
+        let {width, height, textHeight, singleTextLineHeight, underlineHeight} = this.captionShape.getTextRect(ctx, fontSize)
         width += this.padding * 2
         height += this.padding * 2
-        return {width, height};
+        return {width, height, textHeight, singleTextLineHeight, underlineHeight};
     }
-    setDimensions(width, height){
+    setDimensions(width, height, textHeight, singleTextLineHeight){
         this.width = width
         this.height = height
-        this.captionShape.setBoundingBox(width, height)
+        this.textHeight = textHeight
+        this.singleTextLineHeight = singleTextLineHeight
+        this.captionShape.setDimensions(width, height, textHeight, singleTextLineHeight)
     }
     getDimensions(ctx){
         if(!this.width) return this.getOwnDimensions(ctx)

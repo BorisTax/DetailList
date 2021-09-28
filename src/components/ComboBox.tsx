@@ -8,7 +8,7 @@ interface ComboBoxProps {
 }
 
 const ComboBox: FC<ComboBoxProps> = (props: ComboBoxProps) => {
-    const options = props.items?.map((i, index)=><option key={index}>{i}</option>)
+    const options = props.items?.map((i, index)=><option key={index} selected={props.value===i?true:false}>{i}</option>)
         return (
         <div style={{display:"flex",flexDirection:"row"}}>
         {props.title?<span style={{fontSize:"small",marginRight:"5px", whiteSpace: "nowrap"}}>{props.title}</span>:<></>}

@@ -61,11 +61,11 @@ export class UnitListWorker {
     }
 
     public static calcDetailsExtra(detailList: any, materials: TMaterial[] = [{length:2800,width:2070,name:"",texture:true}]){
-        const materialCount: any = {}
+        const plateCount: any = {}
         const totalEdgeLength: any = {}
         for(const mat in detailList){
             const material = materials.find(m=>m.name===mat)||{length:2800,width:2070,name:"ДСП",texture:true}
-            if(!materialCount[mat]) materialCount[mat] = 0
+            if(!plateCount[mat]) plateCount[mat] = 0
             for(const detail of detailList[mat]){
                 if(!totalEdgeLength[`${detail.edgeLength1}`]) totalEdgeLength[`${detail.edgeLength1}`] = 0
                 if(!totalEdgeLength[`${detail.edgeLength2}`]) totalEdgeLength[`${detail.edgeLength2}`] = 0
@@ -75,13 +75,13 @@ export class UnitListWorker {
                 totalEdgeLength[`${detail.edgeLength2}`] += detail.edgeLength2?detail.length:0
                 totalEdgeLength[`${detail.edgeWidth1}`] += detail.edgeWidth1?detail.width:0
                 totalEdgeLength[`${detail.edgeWidth2}`] += detail.edgeWidth2?detail.width:0
-                materialCount[mat] += (detail.length+4) * (detail.width+4)
+                plateCount[mat] += (detail.length+4) * (detail.width+4)
             }
-            materialCount[mat] = Math.ceil(materialCount[mat] / (material.length * material.width))
+            plateCount[mat] = Math.ceil(plateCount[mat] / (material.length * material.width))
         }
         delete(totalEdgeLength['0'])
         for(const edge in totalEdgeLength) totalEdgeLength[edge] = Math.ceil(totalEdgeLength[edge] * 0.001 * 1.15)
-        return {materialCount, totalEdgeLength}
+        return {plateCount, totalEdgeLength}
     }
 
 

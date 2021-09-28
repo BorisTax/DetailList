@@ -15,41 +15,53 @@ export default class TableShape{
         }
     }
 
-    draw(ctx, fontSize) {
-        const {maxColWidth, maxRowHeight} = this.getMaxCellDimensions(ctx, fontSize)
+    draw(ctx, fontSize, onEndPage) {
+        const {maxColWidth, maxRowHeight, maxRowTextHeight, maxSingleTextLineHeight, maxRowUnderlineHeight} = this.getMaxCellDimensions(ctx, fontSize)
         let y = 0
         this.tableRows.forEach((row, rowIndex)=>{
             let x = 0
-            const height = maxRowHeight[rowIndex]
+            const singleTextLineHeight = maxSingleTextLineHeight[rowIndex]
+            const underlineHeight = maxRowUnderlineHeight[rowIndex]
+            const height = maxRowHeight[rowIndex] + underlineHeight
+            const textHeight = maxRowTextHeight[rowIndex]
+            //const height = textHeight + underlineHeight
             row.forEach((col, colIndex)=>{
                 const width = maxColWidth[colIndex]
                 col.setPosition(this.topLeft.x + x,this.topLeft.y + y)
-                col.setDimensions(width, height)
+                col.setDimensions(width, height, textHeight, singleTextLineHeight)
                 col.draw(ctx, fontSize)
                 x += width
             })
             y += height
         })
+        if(onEndPage)onEndPage()
     }
 
     getMaxCellDimensions(ctx, fontSize){
         let maxColWidth = Array(this.colCount).fill(0)
         let maxRowHeight = Array(this.rowCount).fill(0)
+        let maxRowTextHeight = Array(this.rowCount).fill(0)
+        let maxRowUnderlineHeight = Array(this.rowCount).fill(0)
+        let maxSingleTextLineHeight = Array(this.rowCount).fill(0)
         this.tableRows.forEach((row, rowIndex)=>{
             row.forEach((col, colIndex)=>{
-                const {width, height} = col.getOwnDimensions(ctx, fontSize)
+                const {width, height, textHeight, singleTextLineHeight, underlineHeight} = col.getOwnDimensions(ctx, fontSize)
                 if(maxColWidth[colIndex] < width) maxColWidth[colIndex] = width
                 if(maxRowHeight[rowIndex] < height) maxRowHeight[rowIndex] = height
+                if(maxRowTextHeight[rowIndex] < textHeight) maxRowTextHeight[rowIndex] = textHeight
+                if(maxRowUnderlineHeight[rowIndex] < underlineHeight) maxRowUnderlineHeight[rowIndex] = underlineHeight
+                if(maxSingleTextLineHeight[rowIndex] < singleTextLineHeight) maxSingleTextLineHeight[rowIndex] = singleTextLineHeight
             })
         })
-        return {maxColWidth, maxRowHeight}
+        return {maxColWidth, maxRowHeight, maxRowTextHeight, maxSingleTextLineHeight, maxRowUnderlineHeight}
     }
 
-    getTableDimensions(){
-        
-    }
-    getDimensions(ctx,font){
-
+    getTableDimensions(ctx, fontSize){
+        const {maxColWidth, maxRowHeight, maxRowUnderlineHeight} = this.getMaxCellDimensions(ctx, fontSize)
+        const totalWidth = maxColWidth.reduce((a,i)=>a+i,0)
+        let totalHeight = 0
+        maxRowHeight.forEach((rh,i)=>totalHeight+=rh+maxRowUnderlineHeight[i])
+        return {totalWidth, totalHeight}
     }
 
     setPosition(x, y){

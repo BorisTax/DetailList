@@ -50,7 +50,7 @@ const UnitListBar: FC = (props) => {
                     <td className="tdLeft">{u.groupName}</td>
                     <td className="tdLeft">{u.name}</td>
                     <td>{count}</td>
-                    {u.materials.map((m, index)=><td key={index}>{m}</td>)}
+                    {u.materials.map((m, index)=><td key={index}>{m.name}</td>)}
                 </tr>
     })
     const info: InformationProps = {...state.information}
