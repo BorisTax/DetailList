@@ -4,7 +4,9 @@ export class DetailListWorker {
     public static getListByMaterial = (detailList :TDetail[], materialName:string):TDetail[] => {
         return detailList.filter((d:TDetail) => d.material === materialName)
     }
-    
+    public static getHeaders = (showEdgeColumn: boolean) => {
+        return showEdgeColumn?['№','Название','Длина','Ширина','Кол-во','Кромка','Паз','Прим.','Модуль']:['№','Название','Длина','Ширина','Кол-во','Паз','Прим.','Модуль']
+    }
 }
 
 export class UnitListWorker {
@@ -40,28 +42,29 @@ export class UnitListWorker {
             for(const d of unit.details){
                 const detail = {...d}
                 const material = unit.materials[detail.materialId]
-                if(!detailList[material]) detailList[material] = []
+                if(!detailList[material.name]) detailList[material.name] = []
                 detail.modules = new Map()
                 detail.modules.set(unit.shortName,detail.count * unit.count)
-                detail.material = unit.materials[detail.materialId]
+                detail.material = unit.materials[detail.materialId].name
                 detail.edgeColumn = LibraryWorker.makeEdgeColumn(detail)
-                const det = detailList[material].find((d:TDetail) => isEqualDetail(detail,d))
+                const det = detailList[material.name].find((d:TDetail) => isEqualDetail(detail,d))
                 if(det&&groupDetailsByUnits){
                     det.count += detail.count * unit.count
                     for(const key of detail.modules)
                                 det.modules?.set(key[0], det.modules.get(key[0])||0 + (detail.modules.get(key[0])||0))
                 }else{
-                    detailList[material].push({...detail, count: detail.count * unit.count})
+                    detailList[material.name].push({...detail, count: detail.count * unit.count})
                 }
             }
         }
         return detailList
     }
 
-    public static calcDetailsExtra(detailList: any, material: TMaterial = {length:2800,width:2070,name:"",texture:true}){
+    public static calcDetailsExtra(detailList: any, materials: TMaterial[] = [{length:2800,width:2070,name:"",texture:true}]){
         const materialCount: any = {}
         const totalEdgeLength: any = {}
         for(const mat in detailList){
+            const material = materials.find(m=>m.name===mat)||{length:2800,width:2070,name:"ДСП",texture:true}
             if(!materialCount[mat]) materialCount[mat] = 0
             for(const detail of detailList[mat]){
                 if(!totalEdgeLength[`${detail.edgeLength1}`]) totalEdgeLength[`${detail.edgeLength1}`] = 0
@@ -127,7 +130,16 @@ export class UnitListWorker {
                 errorMessage:`Неправильное кол-во материалов в строке ${line}`
             }
             let i = 3
-            unit.materials = Array(unit.materialsCount).fill('').map(() => c[++i])
+            unit.materials = Array(unit.materialsCount).fill('').map(() => {
+                i++
+                const defaultMaterial: TMaterial = {
+                    name: c[i],
+                    length: 2800,
+                    width: 2070,
+                    texture: true
+                }
+                return library.materials.find((m:TMaterial) => m.name===c[i])||defaultMaterial
+            })
             unit.shortName = library.rootGroups[rootIndex].groups[groupIndex].units[unitIndex].shortName
             unit.details = [...library.rootGroups[rootIndex].groups[groupIndex].units[unitIndex].details]
             unitList.push(unit)
@@ -137,6 +149,7 @@ export class UnitListWorker {
             content: unitList
         }
     }
+
 }
 
 export class LibraryWorker{

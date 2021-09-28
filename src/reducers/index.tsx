@@ -34,6 +34,11 @@ export type State = {
     activeUnitCount:number
     groupDetailsByUnits:boolean
     showEdgeColumn: boolean
+    materialData: {
+        plateCount: any
+        totalEdgeLength: any
+    }
+    printScale: number
 }
 
 export type Messages = {

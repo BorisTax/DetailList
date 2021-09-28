@@ -5,7 +5,7 @@ import { UnitListWorker } from "../data/classes";
 import { createExportTable, tableToExcel } from "../data/exportExcel";
 import { Giblab } from "../data/exportGiblab";
 import { printToPDF } from "../data/printPdf";
-import { defaultMaterial, TLibrary, TMaterial, TUnit } from "../data/types";
+import { defaultMaterial, TDetail, TLibrary, TMaterial, TUnit } from "../data/types";
 export const initLibrary={
         type:"",
         version:"",
@@ -33,6 +33,11 @@ const initialState: State={
     activeUnitCount: 1,
     groupDetailsByUnits:true,
     showEdgeColumn: false,
+    materialData: {
+        plateCount: {},
+        totalEdgeLength: {}
+    },
+    printScale: 14
 }
 const stateReducer = (state : State = initialState, action : Action)=>{
     const payload:any = action.payload
@@ -43,10 +48,12 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     var activeGroup:string
     var activeUnit:string
     var detailList: any = {}
+    let materialCount = {}
+    let totalEdgeLength = {}
     switch (action.type){
             case StateActions.ADD_ACTIVE_UNIT:
                 const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
-                const mat=Array(unit.materialsCount).fill(0).map((_, index:number) => state.library.materials[state.activeLibraryMaterials[index]].name)
+                const mat=Array(unit.materialsCount).fill(0).map((_, index:number) => state.library.materials[state.activeLibraryMaterials[index]])
                 const newUnit: TUnit = {
                     name: unit.name,
                     shortName: unit.shortName,
@@ -57,8 +64,9 @@ const stateReducer = (state : State = initialState, action : Action)=>{
                     materialsCount: unit.materialsCount,
                     materials: mat
                 }
-                const dList = UnitListWorker.addUnit(state.unitList,newUnit)
-                return {...state, detailList: dList, activeUnitCount:1}
+                const dList:TDetail[] = UnitListWorker.addUnit(state.unitList,newUnit);
+                ({materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(dList, state.library.materials))
+                return {...state, detailList: dList, activeUnitCount: 1, materialData: {materialCount, totalEdgeLength}}
         case StateActions.GROUP_DETAILS_BY_UNITS:
                 detailList = UnitListWorker.makeDetailList(state.unitList, payload)
                 return {...state, detailList, groupDetailsByUnits: payload}
@@ -101,12 +109,14 @@ const stateReducer = (state : State = initialState, action : Action)=>{
         case StateActions.SET_ACTIVE_DETAILLIST_MATERIAL:
             return {...state, activeDetailListMaterial: payload}
         case StateActions.SET_PLAN:
-            const lists={unitList : payload, detailList : UnitListWorker.makeDetailList(payload)}
-            return {...state, ...lists}
+            const lists={unitList : payload, detailList : UnitListWorker.makeDetailList(payload)};
+            ({materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(lists.detailList, state.library.materials))
+            return {...state, ...lists, materialData: {materialCount, totalEdgeLength} }
         case StateActions.DELETE_SELECTED_UNITS_IN_PLAN:
             const unitList = state.unitList.filter((_, index) => !payload[index])
             const detList = UnitListWorker.makeDetailList(unitList);
-            return {...state, unitList, detailList: detList}
+            ({materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(detList, state.library.materials))
+            return {...state, unitList, detailList: detList, materialData: {materialCount, totalEdgeLength} }
         case StateActions.CLEAR_PLAN:
             return {...state, unitList:[], detailList: []}
         case StateActions.SAVE_PLAN:
@@ -123,9 +133,17 @@ const stateReducer = (state : State = initialState, action : Action)=>{
         case StateActions.EXPORT_EXCEL:
             //const table = createExportTable(state.detailList[payload.material], state.information, payload)
             //console.log(document.getElementById('exportTable'))
-            printToPDF()
+            //printToPDF(state)
             //tableToExcel()(table,'Лист1', `${payload.material}.xls`);
             return state;
+         case StateActions.PRINT_PDF:
+             //const table = createExportTable(state.detailList[payload.material], state.information, payload)
+             //console.log(document.getElementById('exportTable'))
+             printToPDF(state, payload)
+             //tableToExcel()(table,'Лист1', `${payload.material}.xls`);
+             return state;
+         case StateActions.SET_PRINT_SCALE:
+            return {...state, printScale: payload};
         case StateActions.MOVE_UP:
             if(payload>0){
                 const r = state.unitList[payload - 1]

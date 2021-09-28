@@ -22,7 +22,7 @@ export type TUnit = {
     count:number
     details:TDetail[]
     materialsCount:number
-    materials:string[]
+    materials:TMaterial[]
 }
 export type TLibrary = {
     type:string

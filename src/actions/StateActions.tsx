@@ -3,6 +3,7 @@ import { AppDispatch } from "..";
 export const StateActions={
     EXPORT_GIBLAB:'EXPORT_GIBLAB',
     EXPORT_EXCEL:'EXPORT_EXCEL',
+    PRINT_PDF:'PRINT_PDF',
     SAVE_PROJECT:"SAVE_PROJECT",
     SAVE_PLAN:"SAVE_PLAN",
     SET_PLAN:"SET_PLAN",
@@ -37,16 +38,28 @@ export const StateActions={
     MOVE_UP:'MOVE_UP',
     MOVE_DOWN:'MOVE_DOWN',
     SHOW_EDGE_COLUMN:"SHOW_EDGE_COLUMN",
+    SET_PRINT_SCALE:"SET_PRINT_SCALE",
 exportGiblab(material: string){
         return {
             type:StateActions.EXPORT_GIBLAB,
             payload: material
         }
     },
-exportExcel(material: string, materialCount:number, totalEdgeLength: any, heads: string[]){
+exportExcel(){
         return {
             type:StateActions.EXPORT_EXCEL,
-            payload: {material, materialCount, totalEdgeLength, heads}
+        }
+    },
+printPdf(printState: any){
+        return {
+            type:StateActions.PRINT_PDF,
+            payload: printState
+        }
+    },
+setPrintScale(scale: number){
+        return {
+            type:StateActions.SET_PRINT_SCALE,
+            payload: scale
         }
     },
 updateState(){

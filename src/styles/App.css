@@ -159,6 +159,12 @@ td{
 #excel{
   background: url('../images/icons/excel.png') no-repeat;
 }
+#preview{
+  background: url('../images/icons/preview.png') no-repeat;
+}
+#orientation{
+  background: url('../images/icons/orientation.png') no-repeat;
+}
 #open{
   background: url('../images/icons/open.png') no-repeat;
 }

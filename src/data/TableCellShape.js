@@ -1,18 +1,19 @@
 import TextShape from './TextShape';
 export default class TableCellShape{
-    constructor(text, underlines = [1, 2]){
+    constructor({text, underlines = [], frame = true, padding = 2, align = TextShape.CENTER}){
         this.topLeft = {x:0, y:0}
-        this.align = TextShape.CENTER;
+        this.align = align;
         this.caption = [text]
         this.captionShape = new TextShape(this.caption, underlines)
-        this.fontSize = 20
-        this.padding = 5
+        this.padding = padding
+        this.frame = frame
+
     }
-    draw(ctx) {
+    draw(ctx, fontSize) {
         let width
         let height
         if(!this.width) {
-            ({width, height} = this.getOwnDimensions(ctx,this.fontSize))
+            ({width, height} = this.getOwnDimensions(ctx,fontSize))
         }else {
             width = this.width
             height = this.height
@@ -28,16 +29,16 @@ export default class TableCellShape{
                     y:this.topLeft.y + height / 2}    
                 break;
             case TextShape.RIGHT:
-                point = {x:this.bottomRight.x,
+                point = {x:this.topLeft.x + width,
                     y:this.topLeft.y + height / 2}    
                 break;
             default:
         }
-        this.captionShape.setPoint(point);
+        this.captionShape.setBasePoint(point);
         this.captionShape.setAnchor({horizontal : this.align, vertical : TextShape.CENTER});
-        this.captionShape.draw(ctx,this.fontSize)
+        this.captionShape.draw(ctx,fontSize)
         ctx.lineWidth = 1
-        ctx.strokeRect(this.topLeft.x, this.topLeft.y, width, height)
+        if(this.frame)ctx.strokeRect(Math.trunc(this.topLeft.x)+0.5, Math.trunc(this.topLeft.y)+0.5, Math.trunc(width), Math.trunc(height))
     }
     setPosition(x,y){
         this.topLeft = {x,y}
@@ -51,7 +52,7 @@ export default class TableCellShape{
     setFont(fontSize){
         this.fontSize = fontSize
     }
-    getOwnDimensions(ctx,fontSize = 20){
+    getOwnDimensions(ctx, fontSize){
         ctx.font = `${fontSize}px serif`;
         let {width, height} = this.captionShape.getTextRect(ctx, fontSize)
         width += this.padding * 2
@@ -61,6 +62,7 @@ export default class TableCellShape{
     setDimensions(width, height){
         this.width = width
         this.height = height
+        this.captionShape.setBoundingBox(width, height)
     }
     getDimensions(ctx){
         if(!this.width) return this.getOwnDimensions(ctx)

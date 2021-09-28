@@ -1,4 +1,3 @@
-import TextShape from './TextShape';
 import TableCellShape from './TableCellShape';
 export default class TableShape{
     constructor(table){
@@ -10,7 +9,7 @@ export default class TableShape{
         for(const row of table){
             const tableRow = []
             for(const col of row){
-                tableRow.push(new TableCellShape(col.text, col.underline))
+                tableRow.push(new TableCellShape(col))
             }
             this.tableRows.push(tableRow)
         }
@@ -44,6 +43,10 @@ export default class TableShape{
             })
         })
         return {maxColWidth, maxRowHeight}
+    }
+
+    getTableDimensions(){
+        
     }
     getDimensions(ctx,font){
 
