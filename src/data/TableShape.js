@@ -15,9 +15,9 @@ export default class TableShape{
         }
     }
 
-    draw(ctx, fontSize, onEndPage) {
+    draw(ctx, fontSize, printOptions) {
         const {maxColWidth, maxRowHeight, maxRowTextHeight, maxSingleTextLineHeight, maxRowUnderlineHeight} = this.getMaxCellDimensions(ctx, fontSize)
-        let y = 0
+        let y = this.topLeft.y
         this.tableRows.forEach((row, rowIndex)=>{
             let x = 0
             const singleTextLineHeight = maxSingleTextLineHeight[rowIndex]
@@ -27,14 +27,21 @@ export default class TableShape{
             //const height = textHeight + underlineHeight
             row.forEach((col, colIndex)=>{
                 const width = maxColWidth[colIndex]
-                col.setPosition(this.topLeft.x + x,this.topLeft.y + y)
+                col.setPosition(this.topLeft.x + x, y)
                 col.setDimensions(width, height, textHeight, singleTextLineHeight)
                 col.draw(ctx, fontSize)
                 x += width
             })
-            y += height
+            if((printOptions)&&((printOptions.pageHeight-y)<height)){
+                if(printOptions.onEndPage){
+                    printOptions.onEndPage()
+                    //ctx.fillStyle = "white"
+                    ctx.clearRect(0,0,900,900);
+                    y = printOptions.topMargin
+                }
+            } else y += height
         })
-        if(onEndPage)onEndPage()
+        if(printOptions?.onEndPage)printOptions.onEndPage(false)
     }
 
     getMaxCellDimensions(ctx, fontSize){

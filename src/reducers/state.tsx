@@ -1,8 +1,6 @@
-import jsPDF from "jspdf";
 import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
-import { createExportTable, tableToExcel } from "../data/exportExcel";
 import { Giblab } from "../data/exportGiblab";
 import { printToPDF } from "../data/printPdf";
 import { defaultMaterial, TDetail, TLibrary, TMaterial, TUnit } from "../data/types";
@@ -50,6 +48,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     var detailList: any = {}
     let plateCount = {}
     let totalEdgeLength = {}
+    let activeDetailListMaterial = ''
     switch (action.type){
             case StateActions.ADD_ACTIVE_UNIT:
                 const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
@@ -66,7 +65,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
                 }
                 const dList:TDetail[] = UnitListWorker.addUnit(state.unitList,newUnit);
                 ({plateCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(dList, state.library.materials))
-                const activeDetailListMaterial = state.activeDetailListMaterial?state.activeDetailListMaterial:mat[0].name
+                activeDetailListMaterial = state.activeDetailListMaterial?state.activeDetailListMaterial:mat[0].name
                 return {...state, detailList: dList, activeUnitCount: 1, activeDetailListMaterial, materialData: {plateCount, totalEdgeLength}}
         case StateActions.GROUP_DETAILS_BY_UNITS:
                 detailList = UnitListWorker.makeDetailList(state.unitList, payload)
@@ -109,10 +108,14 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             return {...state}
         case StateActions.SET_ACTIVE_DETAILLIST_MATERIAL:
             return {...state, activeDetailListMaterial: payload}
+        case StateActions.SET_ACTIVE_DETAILLIST_MATERIAL_COUNT:
+            state.materialData.plateCount[state.activeDetailListMaterial] = payload
+            return {...state}
         case StateActions.SET_PLAN:
-            const lists={unitList : payload, detailList : UnitListWorker.makeDetailList(payload)};
+            const lists = {unitList : payload, detailList : UnitListWorker.makeDetailList(payload)};
+            activeDetailListMaterial = Object.keys(lists.detailList)[0];
             ({plateCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(lists.detailList, state.library.materials))
-            return {...state, ...lists, materialData: {plateCount, totalEdgeLength} }
+            return {...state, ...lists, activeDetailListMaterial, materialData: {plateCount, totalEdgeLength} }
         case StateActions.DELETE_SELECTED_UNITS_IN_PLAN:
             const unitList = state.unitList.filter((_, index) => !payload[index])
             const detList = UnitListWorker.makeDetailList(unitList);
@@ -192,7 +195,8 @@ var makeJSONFile = function (text: string) {
 
 
   function saveUnitList(state: State){
-    var contents=state.unitList.map((u: TUnit)=>`${u.groupName};${u.name};${u.count};${u.materialsCount};${u.materials.join(';')};${u.rootGroupName}`).join('\r\n')
+    
+    var contents=state.unitList.map((u: TUnit)=>`${u.groupName};${u.name};${u.count};${u.materialsCount};${u.materials.map(m=>m.name).join(';')};${u.rootGroupName}`).join('\r\n')
     var link = document.createElement('a');
     link.setAttribute('download', "project.pln");
     link.href = makeTextFile(contents);

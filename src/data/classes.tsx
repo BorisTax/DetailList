@@ -36,11 +36,11 @@ export class UnitListWorker {
         return UnitListWorker.makeDetailList(unitList)
     }
 
-    public static makeDetailList = (unitList: TUnit[], groupDetailsByUnits: boolean = true): TDetail[] => {
+    public static makeDetailList = (unitList: TUnit[], groupDetailsByUnits: boolean = true): any => {
         const detailList: any = {}
         for(const unit of unitList){
             for(const d of unit.details){
-                const detail = {...d}
+                const detail = d
                 const material = unit.materials[detail.materialId]
                 if(!detailList[material.name]) detailList[material.name] = []
                 detail.modules = new Map()
@@ -71,11 +71,11 @@ export class UnitListWorker {
                 if(!totalEdgeLength[`${detail.edgeLength2}`]) totalEdgeLength[`${detail.edgeLength2}`] = 0
                 if(!totalEdgeLength[`${detail.edgeWidth1}`]) totalEdgeLength[`${detail.edgeWidth1}`] = 0
                 if(!totalEdgeLength[`${detail.edgeWidth2}`]) totalEdgeLength[`${detail.edgeWidth2}`] = 0
-                totalEdgeLength[`${detail.edgeLength1}`] += detail.edgeLength1?detail.length:0
-                totalEdgeLength[`${detail.edgeLength2}`] += detail.edgeLength2?detail.length:0
-                totalEdgeLength[`${detail.edgeWidth1}`] += detail.edgeWidth1?detail.width:0
-                totalEdgeLength[`${detail.edgeWidth2}`] += detail.edgeWidth2?detail.width:0
-                plateCount[mat] += (detail.length+4) * (detail.width+4)
+                totalEdgeLength[`${detail.edgeLength1}`] += detail.edgeLength1?detail.length*detail.count:0
+                totalEdgeLength[`${detail.edgeLength2}`] += detail.edgeLength2?detail.length*detail.count:0
+                totalEdgeLength[`${detail.edgeWidth1}`] += detail.edgeWidth1?detail.width*detail.count:0
+                totalEdgeLength[`${detail.edgeWidth2}`] += detail.edgeWidth2?detail.width*detail.count:0
+                plateCount[mat] += ((detail.length+4) * (detail.width+4))*detail.count
             }
             plateCount[mat] = Math.ceil(plateCount[mat] / (material.length * material.width))
         }

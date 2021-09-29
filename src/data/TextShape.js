@@ -16,7 +16,7 @@ export default class TextShape{
         this.height = 0
     }
     draw(ctx, fontSize){
-        let width = this.width
+        //let width = this.width
         let height = this.height
         const {width: textWidth, height: textHeight, singleTextLineHeight} = this.getTextRect(ctx, fontSize);
         let x=0
@@ -48,6 +48,7 @@ export default class TextShape{
         ctx.font=`${fontSize}px serif`;
         ctx.lineWidth = 1
         for(const t of this.text){
+            ctx.fillStyle = "black"
             ctx.fillText(t, x, y);
             y += (this.singleTextLineHeight + this.lineBreak-2)
         }

@@ -22,6 +22,7 @@ export const StateActions={
     SET_ACTIVE_UNIT:'SET_ACTIVE_UNIT',
     SET_ACTIVE_LIBRARY_MATERIAL:'SET_ACTIVE_LIBRARY_MATERIAL',
     SET_ACTIVE_DETAILLIST_MATERIAL:'SET_ACTIVE_DETAILLIST_MATERIAL',
+    SET_ACTIVE_DETAILLIST_MATERIAL_COUNT:'SET_ACTIVE_DETAILLIST_MATERIAL_COUNT',
     SET_DETAIL_PROPERTY:'SET_DETAIL_PROPERTY',
     LOAD_DETAIL_LIST:'LOAD_DETAIL_LIST',
     SET_DETAIL_LIST:'SET_DETAIL_LIST',
@@ -169,6 +170,12 @@ setActiveDetailListMaterial:(material:string)=>{
         return {
             type: StateActions.SET_ACTIVE_DETAILLIST_MATERIAL,
             payload: material,
+        }
+    },
+setActiveDetailListMaterialCount:(count:number)=>{
+        return {
+            type: StateActions.SET_ACTIVE_DETAILLIST_MATERIAL_COUNT,
+            payload: count,
         }
     },
 setActiveRootGroup:(value:number)=>{

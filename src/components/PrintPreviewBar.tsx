@@ -1,14 +1,13 @@
 import React, { FC, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { StateActions } from '../actions/StateActions';
-import { RootState } from '../reducers';
 import ComboBox from './ComboBox';
+import Counter from './Counter';
 import ToolBar from './ToolBar';
 import ToolButton from './ToolButton';
 import ToolButtonBar from './ToolButtonBar';
 
-const PrintPreviewBar: FC = (props) => {
-    const state = useSelector((store: RootState) => store.state)
+const PrintPreviewBar = (props: any) => {
     const [printState, setPrintState] = useState({fontSize:`14`,orientation:true})
     const dispatch = useDispatch()
     const fonts = Array(15).fill(0).map((_, i)=>`${i+7}`)
@@ -18,16 +17,21 @@ const PrintPreviewBar: FC = (props) => {
             <ToolButtonBar>
                 <ToolButton id="preview" onClick={()=>{dispatch(StateActions.printPdf(printState))}}/>
                 <ToolButton id="orientation" onClick={()=>{
-                    const orientation = !printState.orientation
-                    setPrintState({...printState, orientation})
-                    dispatch(StateActions.printPdf({...printState, orientation:orientation?'p':'l'}))}
+                    setPrintState({...printState, orientation:!printState.orientation});
+                    dispatch(StateActions.printPdf({...printState, orientation:!printState.orientation}))
+                    }
                     }/>
-                <ComboBox items={fonts} title='' value={printState.fontSize} onChange={(_, value)=>{
+                <div style={{paddingLeft:"10px"}}>
+                <ComboBox items={fonts} title='Шрифт' value={printState.fontSize} onChange={(_, value)=>{
                                         setPrintState({...printState, fontSize: value})
                                         dispatch(StateActions.printPdf({...printState, fontSize: value}))
                 }}/>
+                </div>
+                <div style={{paddingLeft:"10px"}}>
+                <Counter title={"Плит:"} value={props.plateCount} min={1} max={10000} setValue={(value)=>dispatch(StateActions.setActiveDetailListMaterialCount(value))}/>
+                </div>
             </ToolButtonBar>
-            <iframe id="printFrame" name="printFrame"
+            <iframe id="printFrame" name="printFrame" title="printFrame"
             onLoad={
                 function(){
                     const frame = document.getElementById('printFrame')

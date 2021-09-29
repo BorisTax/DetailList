@@ -1,7 +1,5 @@
 import {jsPDF} from 'jspdf'
 
-import TextShape from "./TextShape";
-import TableCellShape from './TableCellShape';
 import TableShape from './TableShape';
 import { State } from '../reducers';
 import { TDetail } from './types';
@@ -10,33 +8,43 @@ import { DetailListWorker } from './classes';
 
 export function printToPDF(state: State, printState: any){
     const material = state.activeDetailListMaterial
-    const doc = new jsPDF(printState.orientation, 'px', 'a4');
+    const orientation = printState.orientation?'p':'l'
+    const doc = new jsPDF(orientation, 'px', 'a4');
     //doc.setFont('Arial');
     //doc.setFontSize(20);
-    const scale = 2
-    const pixelScale = 3
+    const scale = 3
+    const pixelScale = 4
     const fontSize = printState.fontSize?printState.fontSize : 14
-    var canv=document.createElement('canvas')
-    const pixels=11.81 / pixelScale
-    var canvWidth = 297*pixels*scale
-    var canvHeight = 210*pixels*scale
+    var canv = document.createElement('canvas')
+    //document.getElementById('canv')?.appendChild(canv)
+    const pixels = 11.81 / pixelScale
+    const pageHeight = orientation === 'p'?297:210
+    const pageWidth = orientation === 'p'?210:297
+    var canvWidth = pageWidth*pixels*scale
+    var canvHeight = pageHeight*pixels*scale
     canv.setAttribute("width", `${canvWidth}`)
     canv.setAttribute("height", `${canvHeight}`)
-    canv.style.width=`${canvWidth/scale}px`
-    canv.style.height=`${canvHeight/scale}px`
+    canv.style.width = `${canvWidth/scale}px`
+    canv.style.height = `${canvHeight/scale}px`
+    const maxCanvHeight =  canvHeight / scale - (canvHeight / scale ) % 50 
+    const maxCanvWidth =  canvWidth / scale - (canvWidth / scale ) % 50 
     var ctx=canv.getContext('2d')
     ctx?.scale(scale,scale)
-    var font;
-    
     const headerList = [
                         [{text:[''],frame:false},{text:['Накладная на передачу деталей в раскрой'],frame:false,align:'left'}],
                         [{text:['Дата:'],frame:false,align:'right'},{text:[state.information.date],frame:false,align:'left'}],
                         [{text:['План:'],frame:false,align:'right'},{text:[state.information.plan],frame:false,align:'left'}],
                         [{text:['Заказ:'],frame:false,align:'right'},{text:[state.information.order],frame:false,align:'left'}],
                         [{text:['Материал:'],frame:false,align:'right'},{text:[material],frame:false,align:'left'}],
-                        [{text:['Плит:'],frame:false,align:'right'},{text:['38'],frame:false,align:'left'}],
-                        [{text:['Кромка:'],frame:false,align:'right'},{text:[''],frame:false,align:'left'}],
+                        [{text:['Плит:'],frame:false,align:'right'},{text:[state.materialData.plateCount[material]],frame:false,align:'left'}],
                       ]
+    const edgeSet = Object.keys(state.materialData.totalEdgeLength).sort()
+    
+    for(const edge in state.materialData.totalEdgeLength){
+      headerList.push([{text:[`Кромка ${edge}мм:`],frame:false,align:'right'},{text:[`${state.materialData.totalEdgeLength[edge]}м`],frame:false,align:'left'}])
+    }
+    const detCount = state.detailList[material]?.reduce((a:number,d:TDetail)=>a+d.count,0)||0
+    headerList.push([{text:[`Деталей:`],frame:false,align:'right'},{text:[`${detCount}`],frame:false,align:'left'}])
     const detailList: any[] = []
     const heads = DetailListWorker.getHeaders(state.showEdgeColumn).map(h=>({text:[h]}))
     detailList.push(heads)
@@ -67,24 +75,19 @@ export function printToPDF(state: State, printState: any){
     // ]
     const headTable = new TableShape(headerList)
     const detailTable = new TableShape(detailList)
-    headTable.setPosition(10,10)
+    const topMargin = 30
+    const leftMargin = 20
+    headTable.setPosition(leftMargin, topMargin)
     const {totalWidth, totalHeight} = headTable.getTableDimensions(ctx, fontSize)
-    detailTable.setPosition(10,totalHeight + 20)
+    detailTable.setPosition(leftMargin, totalHeight + topMargin + 10)
+    //if(ctx)ctx.fillStyle = "white"
     ctx?.clearRect(0,0,canvWidth,canvHeight);
     headTable.draw(ctx,fontSize)
-    detailTable.draw(ctx,fontSize, ()=>{
+    detailTable.draw(ctx,fontSize, {pageHeight:maxCanvHeight, topMargin, onEndPage:(newPage:boolean = true)=>{
       var imgData = canv.toDataURL('image/png');
-      doc.addImage(imgData, 'PNG', 10, 10, canvWidth / pixelScale, canvHeight / pixelScale);
-      ctx?.clearRect(0,0,canvWidth,canvHeight);
-    })
-    //var imgData = canv.toDataURL('image/png'); 
-    //doc.addImage(imgData, 'PNG', 10, 10, canvWidth / pixelScale, canvHeight / pixelScale);
-    //ctx.scale(1/scale,1/scale)
-
-        //imgData = canv.toDataURL('image/png'); 
-        //let dataUrlWithDpi = changeDpiDataUrl(imgData, 300)
-        //doc.addPage()
-        //doc.addImage(imgData, 'PNG', 10, 10);
+      doc.addImage(imgData, 'PNG', 0, 0, canvWidth / pixelScale-30, canvHeight / pixelScale-30);
+      if(newPage)doc.addPage()
+    }})
 
    window.open(doc.output('bloburl'),'printFrame')
    //window.open(doc.output('bloburl'))

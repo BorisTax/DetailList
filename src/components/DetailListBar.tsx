@@ -9,7 +9,7 @@ import CheckBox from './CheckBox';
 import { StateActions } from '../actions/StateActions';
 import ToolButtonBar from './ToolButtonBar';
 import ToolButton from './ToolButton';
-import { DetailListWorker, UnitListWorker } from '../data/classes';
+import { DetailListWorker } from '../data/classes';
 
 const DetailListBar: FC = (props) => {
     const state = useSelector((store: RootState)=>store.state)
@@ -22,11 +22,13 @@ const DetailListBar: FC = (props) => {
                 </tr>
     const curMaterial = state.library?.materials.find(m=>m.name===curMaterialName)
     //const {materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(state.detailList, curMaterial)
+    let detCount = 0
     const details = state.detailList[curMaterialName]?.map((d: TDetail,index:number) => {
             let modules: string[] = []
             if ((d.modules?.size||0) > 1) d.modules?.forEach((value, key) => modules.push(`${key}-${value}`)); else modules[0] = d.modules?.keys().next().value;
             let edgeLength=""
             let edgeWidth=""
+            detCount += d.count
             if(d.edgeLength1||d.edgeLength2) edgeLength="singleEdge"
             if(d.edgeLength1&&d.edgeLength2) edgeLength="doubleEdge"
             if(d.edgeWidth1||d.edgeWidth2) edgeWidth="singleEdge"
@@ -53,6 +55,7 @@ const DetailListBar: FC = (props) => {
                     <div>{`Размер плиты: ${curMaterial?.length}x${curMaterial?.width}`}</div>
                     <div>{`Плит: ${state.materialData.plateCount[curMaterialName]}`}</div>
                     {edge}
+                    <div>{`Деталей: ${detCount}`}</div>
                 </div>:<></>
         return (
         <>
