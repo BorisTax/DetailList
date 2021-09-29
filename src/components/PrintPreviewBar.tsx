@@ -12,7 +12,6 @@ const PrintPreviewBar = (props: any) => {
     const dispatch = useDispatch()
     const fonts = Array(15).fill(0).map((_, i)=>`${i+7}`)
         return (
-        <>
         <ToolBar caption={"Печать"} >
             <ToolButtonBar>
                 <ToolButton id="preview" onClick={()=>{dispatch(StateActions.printPdf(printState))}}/>
@@ -44,7 +43,6 @@ const PrintPreviewBar = (props: any) => {
             }
             />
         </ToolBar>
-        </>
         );
     }
 export default PrintPreviewBar

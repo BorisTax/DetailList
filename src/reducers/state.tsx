@@ -1,6 +1,7 @@
 import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
+import { exportBasis } from "../data/exportBasis";
 import { Giblab } from "../data/exportGiblab";
 import { printToPDF } from "../data/printPdf";
 import { defaultMaterial, TDetail, TLibrary, TMaterial, TUnit } from "../data/types";
@@ -130,9 +131,14 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             saveLibrary(state.library)
             return state;
         case StateActions.EXPORT_GIBLAB:
-            const material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
+            var material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
             const forGiblab = Giblab.export(state.unitList, material)
             exportGiblab(forGiblab);
+            return state;
+        case StateActions.EXPORT_BASIS:
+            var material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
+            const forBasis = exportBasis(state.detailList[material.name], material)
+            saveBasis(forBasis);
             return state;
         case StateActions.EXPORT_EXCEL:
             //const table = createExportTable(state.detailList[payload.material], state.information, payload)
@@ -205,6 +211,12 @@ var makeJSONFile = function (text: string) {
 function exportGiblab(contents:string){
     var link = document.createElement('a');
     link.setAttribute('download', "project.project");
+    link.href = makeTextFile(contents);
+    link.click()
+}
+function saveBasis(contents:string){
+    var link = document.createElement('a');
+    link.setAttribute('download', "project.obl");
     link.href = makeTextFile(contents);
     link.click()
 }

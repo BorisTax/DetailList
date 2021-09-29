@@ -38,7 +38,8 @@ export function printToPDF(state: State, printState: any){
                         [{text:['Материал:'],frame:false,align:'right'},{text:[material],frame:false,align:'left'}],
                         [{text:['Плит:'],frame:false,align:'right'},{text:[state.materialData.plateCount[material]],frame:false,align:'left'}],
                       ]
-    const edgeSet = Object.keys(state.materialData.totalEdgeLength).sort()
+    const edgeWidth: any = {}
+    Object.keys(state.materialData.totalEdgeLength[material]).sort().map((key, index)=> edgeWidth[key]=index+1)
     
     for(const edge in state.materialData.totalEdgeLength){
       headerList.push([{text:[`Кромка ${edge}мм:`],frame:false,align:'right'},{text:[`${state.materialData.totalEdgeLength[edge]}м`],frame:false,align:'left'}])
@@ -52,10 +53,10 @@ export function printToPDF(state: State, printState: any){
       const row: any[] = []
       const lengthUnderlines: number[] = []
       const widthUnderlines: number[] = []
-      if(d.edgeLength1) lengthUnderlines.push(Math.ceil(d.edgeLength1))
-      if(d.edgeLength2) lengthUnderlines.push(Math.ceil(d.edgeLength2))
-      if(d.edgeWidth1) widthUnderlines.push(Math.ceil(d.edgeWidth1))
-      if(d.edgeWidth2) widthUnderlines.push(Math.ceil(d.edgeWidth2))
+      if(d.edgeLength1) lengthUnderlines.push(edgeWidth[d.edgeLength1])
+      if(d.edgeLength2) lengthUnderlines.push(edgeWidth[d.edgeLength2])
+      if(d.edgeWidth1) widthUnderlines.push(edgeWidth[d.edgeWidth1])
+      if(d.edgeWidth2) widthUnderlines.push(edgeWidth[d.edgeWidth2])
       row.push({text:[`${index + 1}`]})
       row.push({text:[d.name],align:"left"})
       row.push({text:[`${d.length}`],underlines:lengthUnderlines})

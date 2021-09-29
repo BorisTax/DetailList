@@ -2,6 +2,7 @@ import { AppDispatch } from "..";
 
 export const StateActions={
     EXPORT_GIBLAB:'EXPORT_GIBLAB',
+    EXPORT_BASIS:'EXPORT_BASIS',
     EXPORT_EXCEL:'EXPORT_EXCEL',
     PRINT_PDF:'PRINT_PDF',
     SAVE_PROJECT:"SAVE_PROJECT",
@@ -43,6 +44,12 @@ export const StateActions={
 exportGiblab(material: string){
         return {
             type:StateActions.EXPORT_GIBLAB,
+            payload: material
+        }
+    },
+exportBasis(material: string){
+        return {
+            type:StateActions.EXPORT_BASIS,
             payload: material
         }
     },

@@ -8,25 +8,29 @@ body{
   min-height:100%;
 }
 hr{
-  margin-bottom: 5px;
-  margin-top: 0px;
+  display: block !important;
+  height: 2px !important;
+  margin: 0px auto 3px auto !important;
+  border-style: inset !important;
+  border-width: 1px !important;
 }
 th{
-  font-size: small;
-  padding: 3px;
-  text-align: center;
-  border: 1px solid;
+  font-size: small !important;
+  padding: 3px !important;
+  text-align: center !important;
+  border: 1px solid !important;
 }
 table{
-  font-size: small;
-  border-collapse:collapse;
-  background-color: white;
+  font-size: small !important;
+  border-collapse:collapse !important;
+  background-color: white !important;
+  margin-top: 3px !important;
 }
 td{
-  padding: 3px;
-  text-align: center;
-  border: 1px solid;
-  white-space: nowrap;
+  padding: 3px !important;
+  text-align: center !important;
+  border: 1px solid !important;
+  white-space: nowrap !important;
 }
 .tdLeft{
   padding: 3px;
@@ -66,7 +70,13 @@ td{
   background-color: rgba(185, 202, 203, 0.8);
   padding: 5px;
   border-radius: 5px;
+  overflow: scroll;
   z-index: 100;
+}
+.toolBarHeader{
+  font-weight: bold;
+  font-size: medium;
+  padding: 0px;
 }
 .toolBarDialog{
   background-color: white;
@@ -106,24 +116,7 @@ td{
   height: 27px;
   mix-blend-mode: overlay;
 }
-.toolBarHeader{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
-  font-size: medium;
-}
-.toolBarHeaderButton{
-  background-size: cover;
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  mix-blend-mode:darken;
-}
-.toolBarHeaderButton:hover{
-  background-color: gray;
-  mix-blend-mode:soft-light;
-}
+
 
 .singleEdge{
   text-decoration: underline;

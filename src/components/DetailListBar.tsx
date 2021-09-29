@@ -47,7 +47,7 @@ const DetailListBar: FC = (props) => {
                     {td}
                 </tr>
     })
-    const edge = Object.keys(state.materialData.totalEdgeLength).map(edge=><div>{`Кромка ${edge}мм - ${state.materialData.totalEdgeLength[edge]}м`}</div>)
+    const edge = curMaterialName?Object.keys(state.materialData.totalEdgeLength[curMaterialName]).map(edge=><div>{`Кромка ${edge}мм - ${state.materialData.totalEdgeLength[curMaterialName][edge]}м`}</div>):<></>
     const materialDiv = curMaterials.length?<div style={{fontSize:"small"}}>
                     <CheckBox value={state.groupDetailsByUnits} title={"Объединять детали по модулям"} onChange={(value)=>dispatch(StateActions.groupDetailsByUnits(value))}/>
                     <CheckBox value={state.showEdgeColumn} title={"Отображать доп. столбец по кромке"} onChange={(value)=>dispatch(StateActions.showEdgeColumn(value))}/>
@@ -58,11 +58,10 @@ const DetailListBar: FC = (props) => {
                     <div>{`Деталей: ${detCount}`}</div>
                 </div>:<></>
         return (
-        <>
         <ToolBar caption={`Общий список деталей`}>
             <ToolButtonBar>
                 <ToolButton id={"giblab"} title={"Экспорт в Giblab"} onClick={() => {dispatch(StateActions.exportGiblab(curMaterialName))}} disabled={!details||(details.length===0)}/>
-                <ToolButton id={"basis"} title={"Экспорт в Базис-Раскрой"} onClick={() => {}} disabled={!details||(details.length===0)}/>
+                <ToolButton id={"basis"} title={"Экспорт в Базис-Раскрой"} onClick={() => {dispatch(StateActions.exportBasis(curMaterialName))}} disabled={!details||(details.length===0)}/>
                 <ToolButton id={"excel"} title={"Экспорт в Excel"} onClick={() => {dispatch(StateActions.exportExcel())}} disabled={!details||(details.length===0)||true}/>
             </ToolButtonBar>
             {materialDiv}
@@ -73,7 +72,6 @@ const DetailListBar: FC = (props) => {
                 </tbody>
             </table>
         </ToolBar>
-        </>
         );
     }
 export default DetailListBar

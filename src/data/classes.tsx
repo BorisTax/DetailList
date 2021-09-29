@@ -66,21 +66,23 @@ export class UnitListWorker {
         for(const mat in detailList){
             const material = materials.find(m=>m.name===mat)||{length:2800,width:2070,name:"ДСП",texture:true}
             if(!plateCount[mat]) plateCount[mat] = 0
+            if(!totalEdgeLength[mat]) totalEdgeLength[mat] = {}
             for(const detail of detailList[mat]){
-                if(!totalEdgeLength[`${detail.edgeLength1}`]) totalEdgeLength[`${detail.edgeLength1}`] = 0
-                if(!totalEdgeLength[`${detail.edgeLength2}`]) totalEdgeLength[`${detail.edgeLength2}`] = 0
-                if(!totalEdgeLength[`${detail.edgeWidth1}`]) totalEdgeLength[`${detail.edgeWidth1}`] = 0
-                if(!totalEdgeLength[`${detail.edgeWidth2}`]) totalEdgeLength[`${detail.edgeWidth2}`] = 0
-                totalEdgeLength[`${detail.edgeLength1}`] += detail.edgeLength1?detail.length*detail.count:0
-                totalEdgeLength[`${detail.edgeLength2}`] += detail.edgeLength2?detail.length*detail.count:0
-                totalEdgeLength[`${detail.edgeWidth1}`] += detail.edgeWidth1?detail.width*detail.count:0
-                totalEdgeLength[`${detail.edgeWidth2}`] += detail.edgeWidth2?detail.width*detail.count:0
+                if(!totalEdgeLength[mat][`${detail.edgeLength1}`]) totalEdgeLength[mat][`${detail.edgeLength1}`] = 0
+                if(!totalEdgeLength[mat][`${detail.edgeLength2}`]) totalEdgeLength[mat][`${detail.edgeLength2}`] = 0
+                if(!totalEdgeLength[mat][`${detail.edgeWidth1}`]) totalEdgeLength[mat][`${detail.edgeWidth1}`] = 0
+                if(!totalEdgeLength[mat][`${detail.edgeWidth2}`]) totalEdgeLength[mat][`${detail.edgeWidth2}`] = 0
+                totalEdgeLength[mat][`${detail.edgeLength1}`] += detail.edgeLength1?detail.length*detail.count:0
+                totalEdgeLength[mat][`${detail.edgeLength2}`] += detail.edgeLength2?detail.length*detail.count:0
+                totalEdgeLength[mat][`${detail.edgeWidth1}`] += detail.edgeWidth1?detail.width*detail.count:0
+                totalEdgeLength[mat][`${detail.edgeWidth2}`] += detail.edgeWidth2?detail.width*detail.count:0
                 plateCount[mat] += ((detail.length+4) * (detail.width+4))*detail.count
             }
             plateCount[mat] = Math.ceil(plateCount[mat] / (material.length * material.width))
+            delete(totalEdgeLength[mat]['0'])
+            for(const edge in totalEdgeLength[mat]) totalEdgeLength[mat][edge] = Math.ceil(totalEdgeLength[mat][edge] * 0.001 * 1.15)
         }
-        delete(totalEdgeLength['0'])
-        for(const edge in totalEdgeLength) totalEdgeLength[edge] = Math.ceil(totalEdgeLength[edge] * 0.001 * 1.15)
+
         return {plateCount, totalEdgeLength}
     }
 

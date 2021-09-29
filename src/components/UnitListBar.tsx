@@ -55,7 +55,6 @@ const UnitListBar: FC = (props) => {
     })
     const info: InformationProps = {...state.information}
         return (
-        <>
         <ToolBar caption={"План"} onClick={(e)=>{setSelectedRows(selectedRows.map(r=>false))}}>
             <InformationBar {...info}/>
             <hr/>
@@ -74,7 +73,6 @@ const UnitListBar: FC = (props) => {
                 </tbody>
             </table>
         </ToolBar>
-        </>
         );
     }
 export default UnitListBar

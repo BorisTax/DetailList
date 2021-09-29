@@ -46,13 +46,13 @@ const LibraryBar: FC = (props) => {
                         </div>
     const dispatch = useDispatch()
         return (
-        <>
         <ToolBar caption={"Библиотека"}>
-            <div style={{display:"flex",flexDirection:"column",alignItems:"stretch",fontSize:"small"}}>
+            
                 <ToolButtonBar>
                     <ToolButton id={"open"} title={"Загрузить"} onClick={()=>dispatch(StateActions.openLibrary())}/>
                     <ToolButton id={"save"} title={"Сохранить"} onClick={()=>dispatch(StateActions.saveLibrary())} disabled={!state.library.type}/>
                 </ToolButtonBar>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"stretch",fontSize:"small"}}>
                 {rootGroups.length>0?<div><ComboBox value={activeRootGroup} items={rootGroups} title={`Группа:`} onChange={(index: number)=>{dispatch(StateActions.setActiveRootGroup(index))}}/></div>:<></>}
                 {groups.length>0?<div><ComboBox value={activeGroup} items={groups} title={"Вид:"} onChange={(index: number)=>{dispatch(StateActions.setActiveGroup(index))}}/></div>:<></>}
                 {units?<div><ComboBox value={activeUnit} items={units} title="" size={15} onChange={(index)=>{dispatch(StateActions.setActiveUnit(index))}}/></div>:<></>}
@@ -61,7 +61,6 @@ const LibraryBar: FC = (props) => {
             </div>
             {details?<DetailBar details={details||[]} unitShortName={activeUnitShort}/>:<></>}
         </ToolBar>
-        </>
         );
     }
 export default LibraryBar

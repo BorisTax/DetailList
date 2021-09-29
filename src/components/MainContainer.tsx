@@ -8,18 +8,17 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../reducers';
 
 const MainContainer:FC = () => { 
+  //style={{display:"flex",justifyContent:"stretch",flexWrap:"wrap"}}
   const state = useSelector((store: RootState) => store.state)
   return (
-    <>
-    <div style={{display:"flex",justifyContent:"stretch",flexWrap:"wrap"}}>
+    <div className="container-fluid">
+    <div className="row">
     <LibraryBar/>
     <UnitListBar/>
     <DetailListBar/>
-    
-    </div>
     <PrintPreviewBar plateCount={state.materialData.plateCount[state.activeDetailListMaterial]}/>
-    <div id="canv"></div>
-    </>
+    </div>
+    </div>
   );
 }
 
