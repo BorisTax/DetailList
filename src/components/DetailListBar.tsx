@@ -60,9 +60,9 @@ const DetailListBar: FC = (props) => {
         return (
         <ToolBar caption={`Общий список деталей`}>
             <ToolButtonBar>
-                <ToolButton id={"giblab"} title={"Экспорт в Giblab"} onClick={() => {dispatch(StateActions.exportGiblab(curMaterialName))}} disabled={!details||(details.length===0)}/>
-                <ToolButton id={"basis"} title={"Экспорт в Базис-Раскрой"} onClick={() => {dispatch(StateActions.exportBasis(curMaterialName))}} disabled={!details||(details.length===0)}/>
-                <ToolButton id={"excel"} title={"Экспорт в Excel"} onClick={() => {dispatch(StateActions.exportExcel())}} disabled={!details||(details.length===0)||true}/>
+                <ToolButton id = {"giblab"} title = {"Экспорт в Giblab"} onClick={() => {dispatch(StateActions.exportGiblab(curMaterialName))}} disabled={!details||(details.length===0)}/>
+                <ToolButton id = {"basis"} title = {"Экспорт в Базис-Раскрой"} onClick={() => {dispatch(StateActions.exportBasis(curMaterialName))}} disabled={!details||(details.length===0)}/>
+                <ToolButton id = {"vacuum"} title = {"Экспорт для вакуумировки"} onClick={() => {dispatch(StateActions.exportVacuum(curMaterialName))}} disabled={!details||(details.length===0)}/>
             </ToolButtonBar>
             {materialDiv}
             <table id={"resultTable"}>

@@ -4,6 +4,7 @@ export const StateActions={
     EXPORT_GIBLAB:'EXPORT_GIBLAB',
     EXPORT_BASIS:'EXPORT_BASIS',
     EXPORT_EXCEL:'EXPORT_EXCEL',
+    EXPORT_VACUUM:'EXPORT_VACUUM',
     PRINT_PDF:'PRINT_PDF',
     SAVE_PROJECT:"SAVE_PROJECT",
     SAVE_PLAN:"SAVE_PLAN",
@@ -50,6 +51,12 @@ exportGiblab(material: string){
 exportBasis(material: string){
         return {
             type:StateActions.EXPORT_BASIS,
+            payload: material
+        }
+    },
+exportVacuum(material: string){
+        return {
+            type:StateActions.EXPORT_VACUUM,
             payload: material
         }
     },

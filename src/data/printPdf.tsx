@@ -41,7 +41,7 @@ export function printToPDF(state: State, printState: any){
     const edgeWidth: any = {}
     Object.keys(state.materialData.totalEdgeLength[material]).sort().map((key, index)=> edgeWidth[key]=index+1)
     
-    for(const edge in state.materialData.totalEdgeLength){
+    for(const edge in state.materialData.totalEdgeLength[material]){
       headerList.push([{text:[`Кромка ${edge}мм:`],frame:false,align:'right'},{text:[`${state.materialData.totalEdgeLength[edge]}м`],frame:false,align:'left'}])
     }
     const detCount = state.detailList[material]?.reduce((a:number,d:TDetail)=>a+d.count,0)||0

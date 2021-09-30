@@ -3,6 +3,7 @@ import { StateActions } from "../actions/StateActions";
 import { UnitListWorker } from "../data/classes";
 import { exportBasis } from "../data/exportBasis";
 import { Giblab } from "../data/exportGiblab";
+import { exportVacuum } from "../data/exportVacuum";
 import { printToPDF } from "../data/printPdf";
 import { defaultMaterial, TDetail, TLibrary, TMaterial, TUnit } from "../data/types";
 export const initLibrary={
@@ -140,6 +141,11 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             const forBasis = exportBasis(state.detailList[material.name], material)
             saveBasis(forBasis);
             return state;
+        case StateActions.EXPORT_VACUUM:
+            var material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
+            const forVacuum = exportVacuum(state.detailList[material.name], material, state.information)
+            saveVacuum(forVacuum);
+            return state;
         case StateActions.EXPORT_EXCEL:
             //const table = createExportTable(state.detailList[payload.material], state.information, payload)
             //console.log(document.getElementById('exportTable'))
@@ -217,6 +223,12 @@ function exportGiblab(contents:string){
 function saveBasis(contents:string){
     var link = document.createElement('a');
     link.setAttribute('download', "project.obl");
+    link.href = makeTextFile(contents);
+    link.click()
+}
+function saveVacuum(contents:string){
+    var link = document.createElement('a');
+    link.setAttribute('download', "project.list");
     link.href = makeTextFile(contents);
     link.click()
 }

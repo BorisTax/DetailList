@@ -1,6 +1,6 @@
 import { TDetail, TMaterial } from "./types"
 
-export const exportCSV = (list: TDetail[], mat: TMaterial, info: {order:string, plan: string, date: string}) =>{
+export const exportVacuum = (list: TDetail[], mat: TMaterial, info: {order:string, plan: string, date: string}) =>{
 let s: string = ''
 let posString: string = ''
 const lineBr = '\r\n'
