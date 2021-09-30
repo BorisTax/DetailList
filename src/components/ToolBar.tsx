@@ -1,6 +1,6 @@
 import React, {FormEvent, ReactNode } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { HRStyle } from '../styles/styles';
+
 type ToolBarProps = {
     children?:ReactNode
     caption?:string

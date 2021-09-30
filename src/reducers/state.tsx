@@ -191,7 +191,7 @@ var makeJSONFile = function (text: string) {
   };
 
   var makeTextFile = function (text: string) {
-    var data = new Blob([text], {type: 'text/html'});
+    var data = new Blob([text], {type: '"text/plain;charset=utf-8"'});
     if (textFile !== null) {
       window.URL.revokeObjectURL(textFile);
     }
