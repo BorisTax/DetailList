@@ -10,6 +10,7 @@ import { StateActions } from '../actions/StateActions';
 import ToolButtonBar from './ToolButtonBar';
 import ToolButton from './ToolButton';
 import { DetailListWorker } from '../data/classes';
+import Counter from './Counter';
 
 const DetailListBar: FC = (props) => {
     const state = useSelector((store: RootState)=>store.state)
@@ -21,7 +22,6 @@ const DetailListBar: FC = (props) => {
                     {heads.map(h=><th key={h}>{h}</th>)}
                 </tr>
     const curMaterial = state.library?.materials.find(m=>m.name===curMaterialName)
-    //const {materialCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(state.detailList, curMaterial)
     let detCount = 0
     const details = state.detailList[curMaterialName]?.map((d: TDetail,index:number) => {
             let modules: string[] = []
@@ -53,7 +53,10 @@ const DetailListBar: FC = (props) => {
                     <CheckBox value={state.showEdgeColumn} title={"Отображать доп. столбец по кромке"} onChange={(value)=>dispatch(StateActions.showEdgeColumn(value))}/>
                     <ComboBox title={"Материал:"} items={curMaterials} value={curMaterialName} onChange={((_, value)=>dispatch(StateActions.setActiveDetailListMaterial(value)))}/>
                     <div>{`Размер плиты: ${curMaterial?.length}x${curMaterial?.width}`}</div>
-                    <div>{`Плит: ${state.materialData.plateCount[curMaterialName]}`}</div>
+                    <div style={{display:"flex"}}>
+                        <Counter title={'Плит: '} value={state.materialData.plateCount[curMaterialName]} min={1} max={10000} setValue={(value)=>dispatch(StateActions.setActiveDetailListMaterialCount(value))}/>
+                    </div>
+                        
                     {edge}
                     <div>{`Деталей: ${detCount}`}</div>
                 </div>:<></>

@@ -16,7 +16,7 @@ const MainContainer:FC = () => {
     <LibraryBar/>
     <UnitListBar/>
     <DetailListBar/>
-    <PrintPreviewBar plateCount={state.materialData.plateCount[state.activeDetailListMaterial]}/>
+    <PrintPreviewBar/>
     </div>
     </div>
   );

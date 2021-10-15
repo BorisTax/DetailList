@@ -26,9 +26,7 @@ const PrintPreviewBar = (props: any) => {
                                         dispatch(StateActions.printPdf({...printState, fontSize: value}))
                 }}/>
                 </div>
-                <div style={{paddingLeft:"10px"}}>
-                <Counter title={"Плит:"} value={props.plateCount} min={1} max={10000} setValue={(value)=>dispatch(StateActions.setActiveDetailListMaterialCount(value))}/>
-                </div>
+
             </ToolButtonBar>
             <iframe id="printFrame" name="printFrame" title="printFrame"
             onLoad={
