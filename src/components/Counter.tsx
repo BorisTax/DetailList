@@ -2,22 +2,22 @@ import React from 'react';
 import ToolButton from './ToolButton';
 
 export default function Counter(props: ICounterProps){
-    const decreaseButton=<ToolButton disabled={props.disabled} id="decrease" onClick={()=>{
+    const decreaseButton=<ToolButton disabled={props.disabled} title={'-1'} id="decrease" onClick={()=>{
         if(props.value>props.min){
             props.setValue(props.value - 1)
         }
         }}/>
-    const increaseButton=<ToolButton disabled={props.disabled} id="increase" onClick={()=>{
+    const increaseButton=<ToolButton disabled={props.disabled} title={'+1'} id="increase" onClick={()=>{
         if(props.value<props.max){
             props.setValue(props.value + 1)
         }
         }}/>
-    const decreaseTenButton=props.ten?<ToolButton disabled={props.disabled} id="decrease" onClick={()=>{
+    const decreaseTenButton=props.ten?<ToolButton disabled={props.disabled} title={'-10'} id="decrease" onClick={()=>{
         if((props.value-props.min)>10){
             props.setValue(props.value - 10)
         } 
          }}/>:<></> 
-     const increaseTenButton=props.ten? < ToolButton disabled={props.disabled} id="increase" onClick={()=>{
+     const increaseTenButton=props.ten? < ToolButton disabled={props.disabled} title={'+10'} id="increase" onClick={()=>{
         if((props.max-props.value)>10) { 
             props.setValue(props.value + 10)
         }

@@ -7,7 +7,9 @@ import { DetailListWorker } from './classes';
 
 
 export function printToPDF(state: State, printState: any){
-    const material = state.activeDetailListMaterial
+    //const material = state.activeDetailListMaterial
+    const curMaterials: string[] = Object.keys(state.detailList)
+    const material: string = state.activeDetailListMaterial||curMaterials[0]
     const orientation = printState.orientation?'p':'l'
     const doc = new jsPDF(orientation, 'px', 'a4');
     //doc.setFont('Arial');

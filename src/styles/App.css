@@ -19,6 +19,7 @@ th{
   padding: 3px !important;
   text-align: center !important;
   border: 1px solid !important;
+  white-space: nowrap !important;
 }
 table{
   font-size: small !important;
@@ -36,6 +37,10 @@ td{
   padding: 3px;
   text-align: left;
   border: 1px solid;
+}
+.textRight{
+  padding: 3px;
+  text-align: right;
 }
 .trSelected{
   background-color: blue;
@@ -70,7 +75,7 @@ td{
   background-color: rgba(185, 202, 203, 0.8);
   padding: 5px;
   border-radius: 5px;
-  overflow: scroll;
+  overflow: hidden;
   z-index: 100;
 }
 .toolBarHeader{
@@ -169,6 +174,9 @@ td{
 }
 #add{
   background: url('../images/icons/add.png') no-repeat;
+}
+#edit{
+  background: url('../images/icons/edit.png') no-repeat;
 }
 #delete{
   background: url('../images/icons/delete.png') no-repeat;

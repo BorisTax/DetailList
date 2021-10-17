@@ -14,14 +14,14 @@ const PrintPreviewBar = (props: any) => {
         return (
         <ToolBar caption={"Печать"} >
             <ToolButtonBar>
-                <ToolButton id="preview" onClick={()=>{dispatch(StateActions.printPdf(printState))}}/>
-                <ToolButton id="orientation" onClick={()=>{
+                <ToolButton id="preview" disabled={props.disabled} onClick={()=>{dispatch(StateActions.printPdf(printState))}}/>
+                <ToolButton id="orientation"  disabled={props.disabled} onClick={()=>{
                     setPrintState({...printState, orientation:!printState.orientation});
                     dispatch(StateActions.printPdf({...printState, orientation:!printState.orientation}))
                     }
                     }/>
                 <div style={{paddingLeft:"10px"}}>
-                <ComboBox items={fonts} title='Шрифт' value={printState.fontSize} onChange={(_, value)=>{
+                <ComboBox items={fonts} title='Шрифт' value={printState.fontSize} disabled={props.disabled} onChange={(_, value)=>{
                                         setPrintState({...printState, fontSize: value})
                                         dispatch(StateActions.printPdf({...printState, fontSize: value}))
                 }}/>

@@ -8,15 +8,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../reducers';
 
 const MainContainer:FC = () => { 
-  //style={{display:"flex",justifyContent:"stretch",flexWrap:"wrap"}}
   const state = useSelector((store: RootState) => store.state)
+  const disabled = Object.keys(state.detailList).length===0;
   return (
     <div className="container-fluid">
     <div className="row">
     <LibraryBar/>
     <UnitListBar/>
     <DetailListBar/>
-    <PrintPreviewBar/>
+    <PrintPreviewBar disabled={disabled}/>
     </div>
     </div>
   );

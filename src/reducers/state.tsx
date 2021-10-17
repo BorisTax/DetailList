@@ -122,7 +122,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             const unitList = state.unitList.filter((_, index) => !payload[index])
             const detList = UnitListWorker.makeDetailList(unitList);
             ({plateCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(detList, state.library.materials))
-            return {...state, unitList, detailList: detList, materialData: {plateCount, totalEdgeLength} }
+            return {...state, unitList, detailList: detList, materialData: {plateCount, totalEdgeLength}, activeDetailListMaterial: ''}
         case StateActions.CLEAR_PLAN:
             return {...state, unitList:[], detailList: []}
         case StateActions.SAVE_PLAN:
