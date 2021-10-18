@@ -42,9 +42,10 @@ export type State = {
 }
 
 export type Messages = {
-        type:'alert'|'confirm'
+        type:'alert'|'confirm'|'input'
         show:boolean
         title:string
+        inputform?:[]
         onOkAction:()=>Action
 }
 

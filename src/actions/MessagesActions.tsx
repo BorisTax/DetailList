@@ -9,7 +9,7 @@ export const MessagesActions={
     HIDE_DIALOGS:'HIDE_DIALOGS',
     OPEN_PLAN:'OPEN_PLAN',
     OPEN_PLAN_ERROR:'OPEN_PLAN_ERROR',
-
+    SHOW_MATERIAL_EDIT_DIALOG:'SHOW_MATERIAL_EDIT_DIALOG',
 confirmDeletingUnitsFromPlan(selectedUnits: boolean[]){
     return {
         type:MessagesActions.CONFIRM_DELETING_UNITS_FROM_PLAN,
@@ -24,6 +24,12 @@ confirmClearingUnitListInPlan(){
 hideDialogs(){
     return {
         type:MessagesActions.HIDE_DIALOGS,
+    }
+},
+showMaterialEditDialog(inputform: any){
+    return {
+        type:MessagesActions.SHOW_MATERIAL_EDIT_DIALOG,
+        payload:{title:'Добавить материал', inputform}
     }
 },
 openPlan(library: TLibrary){

@@ -11,6 +11,8 @@ import InputLineBar from './InputLineBar';
 import ToolBar from './ToolBar';
 import ToolButton from './ToolButton';
 import ToolButtonBar from './ToolButtonBar';
+import { MessagesActions } from '../actions/MessagesActions';
+import { getMaterialInputForm } from '../data/inputforms';
 
 const LibraryBar: FC = (props) => {
     const state: State = useSelector((store: RootState)=>store.state)
@@ -34,8 +36,14 @@ const LibraryBar: FC = (props) => {
                                 title={`Материал ${i+1}`}
                                 onChange={(index, value)=>{dispatch(StateActions.setActiveLibraryMaterial(i, value))}}
                                 />
-                            <ToolButton id='edit' onClick={()=>{}}/>
-                            <ToolButton id='add' onClick={()=>{}}/>
+                            <ToolButton id='edit' onClick={()=>{
+                                const inputForm = getMaterialInputForm(state.library.materials[state.activeLibraryMaterials[i]])
+                                dispatch(MessagesActions.showMaterialEditDialog(inputForm))}
+                                }/>
+                            <ToolButton id='add' onClick={()=>{
+                                const inputForm = getMaterialInputForm(state.library.materials[state.activeLibraryMaterials[i]])
+                                dispatch(MessagesActions.showMaterialEditDialog(inputForm))}
+                                }/>
                             </InputLineBar>)
     const materialsDiv=<div>
             {materialsList}

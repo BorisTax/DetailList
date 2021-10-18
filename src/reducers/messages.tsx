@@ -24,6 +24,8 @@ const messagesReducer = (state : Messages = initialState, action : Action)=>{
                 return {...state, show: false}
             case MessagesActions.OPEN_PLAN_ERROR:
                 return {...state, type:'alert',title:payload, show: true}
+            case MessagesActions.SHOW_MATERIAL_EDIT_DIALOG:
+                return {...state, type:'input',title:payload.title, inputform:payload.inputform, show: true, onOkAction:()=>({type:""})}
             default:
              return state;
     }
