@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StateActions } from '../actions/StateActions';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { TLibraryGroup, TLibraryRootGroup, TLibraryUnit } from '../data/types';
+import { TLibraryGroup, TLibraryRootGroup, TLibraryUnit, TMaterial } from '../data/types';
 import { RootState, State } from '../reducers';
 import ComboBox from './ComboBox';
 import Counter from './Counter';
@@ -37,12 +37,14 @@ const LibraryBar: FC = (props) => {
                                 onChange={(index, value)=>{dispatch(StateActions.setActiveLibraryMaterial(i, value))}}
                                 />
                             <ToolButton id='edit' onClick={()=>{
-                                const inputForm = getMaterialInputForm(state.library.materials[state.activeLibraryMaterials[i]])
-                                dispatch(MessagesActions.showMaterialEditDialog(inputForm))}
+                                const materials = state.library.materials.map((m: TMaterial)=>m.name).filter(m=>m!==state.library.materials[state.activeLibraryMaterials[i]].name)
+                                const inputForm = getMaterialInputForm(materials,state.library.materials[state.activeLibraryMaterials[i]], false)
+                                dispatch(MessagesActions.showMaterialEditDialog(inputForm, false))}
                                 }/>
                             <ToolButton id='add' onClick={()=>{
-                                const inputForm = getMaterialInputForm(state.library.materials[state.activeLibraryMaterials[i]])
-                                dispatch(MessagesActions.showMaterialEditDialog(inputForm))}
+                                const materials = state.library.materials.map((m: TMaterial)=>m.name)
+                                const inputForm = getMaterialInputForm(materials,state.library.materials[state.activeLibraryMaterials[i]], true)
+                                dispatch(MessagesActions.showMaterialEditDialog(inputForm, true))}
                                 }/>
                             </InputLineBar>)
     const materialsDiv=<div>
