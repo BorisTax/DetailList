@@ -8,8 +8,9 @@ import TextBox from './TextBox';
 
 export type InputFormProps = {
     title:string
+    ext?:any
     inputform:[]
-    onOkAction:()=>void
+    onOkAction:(values:any[], ext:any)=>void
 }
 
 const InputForm = (props: InputFormProps) => {
@@ -39,7 +40,11 @@ const InputForm = (props: InputFormProps) => {
                     <div className={"toolBar toolBarDialog"} onClick={(e)=>{e.stopPropagation()}}>
                       <div>{props.title}</div>
                       <hr/>
-                      <form onSubmit={()=>{dispatch(props.onOkAction());dispatch(MessagesActions.hideDialogs())}}>
+                      <form onSubmit={(e)=>{
+                          e.preventDefault();
+                          dispatch(props.onOkAction(state.values, props.ext));
+                          dispatch(MessagesActions.hideDialogs())}}
+                          >
                         <div>
                           {controls}
                         </div>

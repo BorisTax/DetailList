@@ -26,10 +26,10 @@ hideDialogs(){
         type:MessagesActions.HIDE_DIALOGS,
     }
 },
-showMaterialEditDialog(inputform: any, newMaterial: boolean){
+showMaterialEditDialog(inputform: any, newMaterial: boolean, materialIndex: number){
     return {
         type:MessagesActions.SHOW_MATERIAL_EDIT_DIALOG,
-        payload:{inputform, newMaterial}
+        payload:{inputform, newMaterial, materialIndex}
     }
 },
 openPlan(library: TLibrary){

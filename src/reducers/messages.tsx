@@ -1,4 +1,5 @@
 import { Action, Messages } from ".";
+import { LibraryActions } from "../actions/LibraryActions";
 import { MessagesActions } from "../actions/MessagesActions";
 import { StateActions } from "../actions/StateActions";
 export const initLibrary={
@@ -11,6 +12,7 @@ const initialState: Messages={
     type:"alert",
     show: false,
     title:"",
+    ext: {},
     onOkAction:()=>({type:""})
 }
 const messagesReducer = (state : Messages = initialState, action : Action)=>{
@@ -25,7 +27,7 @@ const messagesReducer = (state : Messages = initialState, action : Action)=>{
             case MessagesActions.OPEN_PLAN_ERROR:
                 return {...state, type:'alert',title:payload, show: true}
             case MessagesActions.SHOW_MATERIAL_EDIT_DIALOG:
-                return {...state, type:'input',title:payload.newMaterial?'Добавить материал':'Редактировать материал', inputform:payload.inputform, show: true, onOkAction:()=>({type:""})}
+                return {...state, type:'input',title:payload.newMaterial?'Добавить материал':'Редактировать материал',ext:{newMaterial: payload.newMaterial, materialIndex: payload.materialIndex}, inputform:payload.inputform, show: true, onOkAction:(values: any)=>payload.newMaterial ? LibraryActions.addMaterial(values):LibraryActions.editMaterial(values, payload.materialIndex)}
             default:
              return state;
     }

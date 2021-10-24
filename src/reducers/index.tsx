@@ -46,7 +46,8 @@ export type Messages = {
         show:boolean
         title:string
         inputform?:[]
-        onOkAction:()=>Action
+        ext?:any
+        onOkAction:(props?: any)=>Action
 }
 
 export type Action = {

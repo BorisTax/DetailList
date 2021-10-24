@@ -1,5 +1,6 @@
 import { Action, State } from ".";
 import { StateActions } from "../actions/StateActions";
+import { LibraryActions } from "../actions/LibraryActions";
 import { UnitListWorker } from "../data/classes";
 import { exportBasis } from "../data/exportBasis";
 import { Giblab } from "../data/exportGiblab";
@@ -52,6 +53,25 @@ const stateReducer = (state : State = initialState, action : Action)=>{
     let totalEdgeLength = {}
     let activeDetailListMaterial = ''
     switch (action.type){
+            case LibraryActions.ADD_MATERIAL:
+                {
+                const m: TMaterial = {name:payload[0], 
+                                            length: payload[1], 
+                                            width: payload[2],
+                                            texture: payload[3],
+                                            gloss: payload[4]
+                                        }
+                state.library.materials.push(m)
+                }
+                return {...state}
+            case LibraryActions.EDIT_MATERIAL:
+                const m: TMaterial = state.library.materials[payload.materialIndex]
+                m.name = payload.values[0] 
+                m.length = payload.values[1] 
+                m.width = payload.values[2]
+                m.texture = payload.values[3]
+                m.gloss = payload.values[4]
+                return {...state}
             case StateActions.ADD_ACTIVE_UNIT:
                 const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
                 const mat=Array(unit.materialsCount).fill(0).map((_, index:number) => state.library.materials[state.activeLibraryMaterials[index]])
@@ -76,8 +96,9 @@ const stateReducer = (state : State = initialState, action : Action)=>{
                     return {...state, activeUnitCount: payload}
         case StateActions.SET_UNIT_COUNT_IN_PLAN:
             state.unitList[payload.index].count=payload.value
-            detailList = UnitListWorker.makeDetailList(state.unitList)
-            return {...state, detailList}
+            detailList = UnitListWorker.makeDetailList(state.unitList);
+            ({plateCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(detailList, state.library.materials))
+            return {...state, detailList, materialData: {plateCount, totalEdgeLength}}
         case StateActions.SET_INFORMATION:
             return {...state, information: {...payload}}
         case StateActions.SET_LIBRARY:

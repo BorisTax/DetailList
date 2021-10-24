@@ -14,7 +14,7 @@ const App:FC = () => {
       <MainContainer/>
       {(state.type==='confirm'&&state.show)?<Confirm title={state.title} onOkAction={()=>state.onOkAction()}/>:<></>}
       {(state.type==='alert'&&state.show)?<Alert title={state.title}/>:<></>}
-      {(state.type==='input'&&state.show)?<InputForm title={state.title} inputform={state.inputform||[]} onOkAction={()=>state.onOkAction()}/>:<></>}
+      {(state.type==='input'&&state.show)?<InputForm title={state.title} ext={state.ext} inputform={state.inputform||[]} onOkAction={(values)=>state.onOkAction(values)}/>:<></>}
       </div>
   );
 }

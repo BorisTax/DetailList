@@ -39,14 +39,14 @@ const LibraryBar: FC = (props) => {
                             <ToolButton id='edit' onClick={()=>{
                                 const materials = state.library.materials.map((m: TMaterial)=>m.name).filter(m=>m!==state.library.materials[state.activeLibraryMaterials[i]].name)
                                 const inputForm = getMaterialInputForm(materials,state.library.materials[state.activeLibraryMaterials[i]], false)
-                                dispatch(MessagesActions.showMaterialEditDialog(inputForm, false))}
+                                dispatch(MessagesActions.showMaterialEditDialog(inputForm, false, state.activeLibraryMaterials[i]))}
                                 }/>
                             <ToolButton id='add' onClick={()=>{
                                 const materials = state.library.materials.map((m: TMaterial)=>m.name)
                                 const inputForm = getMaterialInputForm(materials,state.library.materials[state.activeLibraryMaterials[i]], true)
-                                dispatch(MessagesActions.showMaterialEditDialog(inputForm, true))}
+                                dispatch(MessagesActions.showMaterialEditDialog(inputForm, true, 0))}
                                 }/>
-                            </InputLineBar>)
+                            </InputLineBar>) 
     const materialsDiv=<div>
             {materialsList}
     </div>
