@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 interface NumberBoxProps {
     value:number
     title:string

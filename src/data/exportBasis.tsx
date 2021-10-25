@@ -6,7 +6,7 @@ let posString: string = ''
 const pos: any = {}
 const lineBr = '\r\n'
 const tab = '\t'
-let s:string = '\ufeff'+"List_of_panels_for_cutting" + lineBr
+let s:string = '\ufeffList_of_panels_for_cutting' + lineBr
 s = s + "Version 11.0" + lineBr + lineBr
 s = s + "Текущий материал" + tab + mat.name + lineBr
 s = s + "Текущий размер" + tab + mat.length + "x" + mat.width + lineBr
@@ -15,7 +15,8 @@ s = s + "11.5.0.29468 08.07.2020" + lineBr + lineBr
 s = s + "Material " + tab + mat.name + tab + "Slab" + tab + tab + "0" + lineBr
 for(const d of list){
 const modules:string[] = []
-d.modules?.forEach((value, key) => modules.push(`${key}-${value}`))
+const modulesCount = d.modules?.size||0
+d.modules?.forEach((value, key) => modulesCount>1?modules.push(`${key}-${value}`):modules.push(`${key}`));
 const moduleNamesString = modules.join(', ')
 if (pos[moduleNamesString]) {
      pos[moduleNamesString] = pos[moduleNamesString] + 1

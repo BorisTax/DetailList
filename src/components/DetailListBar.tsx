@@ -47,7 +47,7 @@ const DetailListBar: FC = (props) => {
                     {td}
                 </tr>
     })
-    const edge = curMaterialName?Object.keys(state.materialData.totalEdgeLength[curMaterialName]).map(edge=><div>{`Кромка ${edge}мм - ${state.materialData.totalEdgeLength[curMaterialName][edge]}м`}</div>):<></>
+    const edge = curMaterialName&&state.materialData.totalEdgeLength[curMaterialName]?Object.keys(state.materialData.totalEdgeLength[curMaterialName]).map(edge=><div>{`Кромка ${edge}мм - ${state.materialData.totalEdgeLength[curMaterialName][edge]}м`}</div>):<></>
     const materialDiv = curMaterials.length?<div style={{fontSize:"small"}}>
                     <CheckBox value={state.groupDetailsByUnits} title={"Объединять детали по модулям"} onChange={(value)=>dispatch(StateActions.groupDetailsByUnits(value))}/>
                     <CheckBox value={state.showEdgeColumn} title={"Отображать доп. столбец по кромке"} onChange={(value)=>dispatch(StateActions.showEdgeColumn(value))}/>
@@ -68,12 +68,14 @@ const DetailListBar: FC = (props) => {
                 <ToolButton id = {"vacuum"} title = {"Экспорт для вакуумировки"} onClick={() => {dispatch(StateActions.exportVacuum(curMaterialName))}} disabled={!details||(details.length===0)}/>
             </ToolButtonBar>
             {materialDiv}
+            <div className="tableContainer">
             <table id={"resultTable"}>
                 {header}
                 <tbody>
                   {details}  
                 </tbody>
             </table>
+            </div>
         </ToolBar>
         );
     }

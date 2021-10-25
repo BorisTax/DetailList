@@ -12,7 +12,6 @@ export type InformationProps = {
 const InformationBar: FC<InformationProps> = (props: InformationProps) => {
         const dispatch = useDispatch()
         const info=props
-        const style={display:"flex",alignItems:"center"}
         return <div style={{display:'grid',gridTemplateColumns:'50px min-content'}}>
             <div className='textRight'>{"Заказ:"}</div>
             <input value={info.order} 

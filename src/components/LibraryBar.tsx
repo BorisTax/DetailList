@@ -27,7 +27,7 @@ const LibraryBar: FC = (props) => {
     const activeUnitShort: string|undefined = group?.units[state.activeUnitIndex].shortName
     const details = group?.units[state.activeUnitIndex].details
     if(!groups) groups = []
-    const materialsList=[]
+    const materialsList = []
     for(let i=0;i<group?.units[state.activeUnitIndex].materialsCount;i++)
         materialsList.push(<InputLineBar>
                             <ComboBox 
@@ -47,7 +47,7 @@ const LibraryBar: FC = (props) => {
                                 dispatch(MessagesActions.showMaterialEditDialog(inputForm, true, 0))}
                                 }/>
                             </InputLineBar>) 
-    const materialsDiv=<div>
+    const materialsDiv = <div>
             {materialsList}
     </div>
 

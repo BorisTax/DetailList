@@ -66,12 +66,14 @@ const UnitListBar: FC = (props) => {
                 <ToolButton id={"up"} title={"Переместить вверх"} onClick={() => {dispatch(StateActions.moveUp(onlySelectedRowIndexes[0]));setSelectedRows(moveSelectedRowUp(onlySelectedRowIndexes[0]))}} disabled={(onlySelectedRowIndexes.length!==1)||(selectedRows[0])}/>
                 <ToolButton id={"down"} title={"Переместить вниз"} onClick={() => {dispatch(StateActions.moveDown(onlySelectedRowIndexes[0]));;setSelectedRows(moveSelectedRowDown(onlySelectedRowIndexes[0]))}} disabled={(onlySelectedRowIndexes.length!==1)||(selectedRows[selectedRows.length-1])}/>
             </ToolButtonBar>
+            <div className="tableContainer">
             <table style={{fontSize:"small"}}>
                 {header}
                 <tbody>
                   {units}  
                 </tbody>
             </table>
+            </div>
         </ToolBar>
         );
     }

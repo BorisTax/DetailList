@@ -18,7 +18,7 @@ export default class TextShape{
     draw(ctx, fontSize){
         //let width = this.width
         let height = this.height
-        const {width: textWidth, height: textHeight, singleTextLineHeight} = this.getTextRect(ctx, fontSize);
+        const {width: textWidth} = this.getTextRect(ctx, fontSize);
         let x=0
         let y=0
         switch(this.anchor.horizontal){

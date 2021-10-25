@@ -29,7 +29,7 @@ export function printToPDF(state: State, printState: any){
     canv.style.width = `${canvWidth/scale}px`
     canv.style.height = `${canvHeight/scale}px`
     const maxCanvHeight =  canvHeight / scale - (canvHeight / scale ) % 50 
-    const maxCanvWidth =  canvWidth / scale - (canvWidth / scale ) % 50 
+    //const maxCanvWidth =  canvWidth / scale - (canvWidth / scale ) % 50 
     var ctx=canv.getContext('2d')
     ctx?.scale(scale,scale)
     const headerList = [
@@ -81,7 +81,7 @@ export function printToPDF(state: State, printState: any){
     const topMargin = 30
     const leftMargin = 20
     headTable.setPosition(leftMargin, topMargin)
-    const {totalWidth, totalHeight} = headTable.getTableDimensions(ctx, fontSize)
+    const { totalHeight } = headTable.getTableDimensions(ctx, fontSize)
     detailTable.setPosition(leftMargin, totalHeight + topMargin + 10)
     //if(ctx)ctx.fillStyle = "white"
     ctx?.clearRect(0,0,canvWidth,canvHeight);
@@ -99,18 +99,6 @@ export function printToPDF(state: State, printState: any){
 }
 
 
-
-
-
-var textFile: any = null
-var makeTextFile = function (text: string) {
-    var data = new Blob([text], {type: 'application/json'});
-    if (textFile !== null) {
-      window.URL.revokeObjectURL(textFile);
-    }
-    textFile = window.URL.createObjectURL(data);
-    return textFile;
-  };
 
 
   

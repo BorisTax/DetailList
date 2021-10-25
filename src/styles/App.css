@@ -46,6 +46,9 @@ td{
   background-color: blue;
   color: white;
 }
+.tableContainer{
+  overflow: auto
+}
 .screenContainer{
   position:absolute;
   width:80%;

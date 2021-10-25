@@ -34,6 +34,7 @@ const InputForm = (props: InputFormProps) => {
               return <CheckBox title={input.caption} value={state.values[index]} onChange={(value)=>{
                 state.values[index] = value; setState(()=>({...state, values:[...state.values]}))}}/>
             default:
+              return <></>
             }
         })
         return <div className='modalContainer  noselect'>

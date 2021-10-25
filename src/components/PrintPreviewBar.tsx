@@ -1,8 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch} from 'react-redux';
 import { StateActions } from '../actions/StateActions';
 import ComboBox from './ComboBox';
-import Counter from './Counter';
 import ToolBar from './ToolBar';
 import ToolButton from './ToolButton';
 import ToolButtonBar from './ToolButtonBar';

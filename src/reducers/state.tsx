@@ -74,7 +74,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
                 return {...state}
             case StateActions.ADD_ACTIVE_UNIT:
                 const unit = state.library.rootGroups[state.activeRootGroupIndex].groups[state.activeGroupIndex].units[state.activeUnitIndex]
-                const mat=Array(unit.materialsCount).fill(0).map((_, index:number) => state.library.materials[state.activeLibraryMaterials[index]])
+                const mat = Array(unit.materialsCount).fill(0).map((_, index:number) => state.library.materials[state.activeLibraryMaterials[index]])
                 const newUnit: TUnit = {
                     name: unit.name,
                     shortName: unit.shortName,
@@ -109,7 +109,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
                 activeGroup : payload.rootGroups[0].groups[0].name,
                 activeUnitIndex : 0,
                 activeUnit : payload.rootGroups[0].groups[0].units[0].name,
-                activeLibraryMaterials: Array(payload.rootGroups[0].groups[0].units[0].materialCount).fill(0)
+                activeLibraryMaterials: Array(payload.rootGroups[0].groups[0].units[0].materialsCount).fill(0)
             }
             return {...state,library:action.payload, ...activeFields}
         case StateActions.SET_ACTIVE_ROOT_GROUP:
@@ -145,7 +145,7 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             ({plateCount, totalEdgeLength} = UnitListWorker.calcDetailsExtra(detList, state.library.materials))
             return {...state, unitList, detailList: detList, materialData: {plateCount, totalEdgeLength}, activeDetailListMaterial: ''}
         case StateActions.CLEAR_PLAN:
-            return {...state, unitList:[], detailList: []}
+            return {...state, unitList: [], activeDetailListMaterial: '', detailList: [], materialData: {plateCount: {}, totalEdgeLength: {}}}
         case StateActions.SAVE_PLAN:
             saveUnitList(state)
             return state;
@@ -153,14 +153,18 @@ const stateReducer = (state : State = initialState, action : Action)=>{
             saveLibrary(state.library)
             return state;
         case StateActions.EXPORT_GIBLAB:
-            var material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
+            {
+            const material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
             const forGiblab = Giblab.export(state.unitList, material)
             exportGiblab(forGiblab);
+            }
             return state;
         case StateActions.EXPORT_BASIS:
-            var material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
+            {
+            const material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
             const forBasis = exportBasis(state.detailList[material.name], material)
             saveBasis(forBasis);
+            }
             return state;
         case StateActions.EXPORT_VACUUM:
             var material: TMaterial|undefined = state.library.materials.find((m: TMaterial) => m.name === payload)||defaultMaterial
