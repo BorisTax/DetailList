@@ -253,7 +253,7 @@ function saveBasis(contents:string){
 }
 function saveVacuum(contents:string){
     var link = document.createElement('a');
-    link.setAttribute('download', "project.list");
+    link.setAttribute('download', "project.json");
     link.href = makeTextFile(contents);
     link.click()
 }
